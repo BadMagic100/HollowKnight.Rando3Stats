@@ -1,0 +1,80 @@
+Unique item pools: 
+Essence_Boss, Dreamer, Rock, Relic, Soul, Charm, PalaceLore, Vessel, Cocoon,
+Lore, Ore, Geo, Skill, EggShopLocation, PalaceSoul, Root, SplitCloak, GrubItem, 
+Key, EggShopItem, MimicItem, Stag, Swim, SplitClaw, CursedNail, ElevatorPass, 
+Focus, Flame, CursedMask, Mask, Notch, Map, Journal, Boss_Geo, JunkPitChest, 
+Fake, CursedNotch, PalaceJournal
+
+Unique location pools: 
+Map, Rock, Soul, Grub, Cocoon, Skill, Lore, SplitClaw, Egg, Stag, Key, Charm,
+Root, Essence_Boss, Relic, Vessel, Mimic, Ore, Geo, Mask, JunkPitChest, Boss_Geo, 
+Flame, Dreamer, EggShopLocation, PalaceSoul, ElevatorPass, Notch, Journal, PalaceLore, 
+SplitCloakLocation, PalaceJournal
+
+Other locations: Sly, Sly_(Key), Iselda, Salubra, Leg_Eater
+
+Unchecked locations: 
+Monomon, 
+Dream_Gate, Awoken_Dream_Nail, Dream_Wielder, Mask_Shard-Seer, Vessel_Fragment-Seer, Pale_Ore-Seer, Hallownest_Seal-Seer, Arcane_Egg-Seer,
+Grubsong, Grubberfly's_Elegy, Pale_Ore-Grubs, Rancid_Egg-Grubs, Hallownest_Seal-Grubs, King's_Idol-Grubs,
+King_Fragment, Void_Heart, Collector's_Map, 
+Mask_Shard-Grey_Mourner, 
+Pale_Ore-Colosseum, Charm_Notch-Colosseum, King's_Idol-Pale_Lurker, 
+Wanderer's_Journal-Above_Mantis_Village, Wanderer's_Journal-Kingdom's_Edge_Entrancem, Hallownest_Seal-Queen's_Gardens,
+Crossroads_Stag, Queen's_Gardens_Stag, City_Storerooms_Stag, King's_Station_Stag, Distant_Village_Stag, Hidden_Station_Stag, Elevator_Pass, 
+450_Geo-Egg_Shop_1, 450_Geo-Egg_Shop_2, 450_Geo-Egg_Shop_3, 450_Geo-Egg_Shop_4, 450_Geo-Egg_Shop_5, 
+Sly, Sly_(Key), Salubra
+
+Item pools of interest: EggShopLocation, SplitCloak (SplitCloakLocation),
+GrubItem, EggShopItem, MimicItem, Swim, CursedNail, Focus, CursedMask, Fake, CursedNotch
+
+RandoMapInputListener, Custom Knight Canvas, GUI Controller, New Game Object,
+ New Game Object, New Game Object, SceneParticlesController, AchievementsList(Clone)
+ , @tk2dUpdateManager, New Game Object, DesktopPlatform, CoreLoop, ConfigManager, _UIManager, Atmos Surface Wind,
+ Shade, Rain Indoor, Mines Machinrery, Extra, Text, Fungus, Camera Target, UIButtonSkins, ActiveRegion, _GameManager, 
+ Atmos, tk2dCamera, Background, LoadingCanvas, EventSystem, CameraParent, _GameCameras, UIAudioPlayer, Rain Outdoor, 
+ spatter_orange, Waterfall Med, Atmos Cave Wind, Atmos Surface Wind C, ControllerMessage, AudioManager, Start Blanker,
+ ControllerOverlay, RunningKnightSpinner, Greenpath, Dream Dialogue, Atmos Grass Wind, Tension, AspectBackground, Particle Rock,
+ Mines Crystal, Sub, Main, GlobalPool, Deepnest, DisplayPicture, EnemyHitEffects, Main Alt, Waterways, Action, UICanvas, AchievementsPopupPanel,
+ CheckpointIcon, SpriteCache, Bounds Cage, Atmos Misc Wind, Fog Canyon, EngagedUser, AchievementCanvas, Music, Audio, Atmos Cave Noises, FootstepsWalk,
+ SD Charge Wall, Spells, black_solid (2), Dust Plume, black_solid, DownSlash, Wall Rocks, SD Crystal Gen W1, AltSlash, Warp In Pt, Clash Tink, SD Check Top,
+ black_solid (1), SD Check Bot, HardLanding, Set Fail Pt, SD Crystal Burst GR, SuperDash Charge, Scr Orbs, Blessing Ghost, SD Charge Glow, Clash Tink,
+ Low Health Leak, Slash, Hit Pt 1, Q Orbs, Clash Tink, Hit Pt 2, Set Pt, Dung Recharge, black_solid (3), HeroBox, SD Charge, Dash Burst, Walljump,
+ Attacks, SuperDashing, SD Crystal Gen G1, Dream Nail, Clash Tink, Bub Cloud, Roar Dust, Spore Recharge, Acid Armour, Nail Art Ready, Falling,
+ Can Focus Particles, Landing, aligner, Knight, Double J Feather, Focus Effects, Roar Dust Lil, Vignette, white_light_donut, Q Orbs 2, SD Crystal Burst GL,
+ Fury, HeroLight, Dung, Dust Wall Impact, Dash Ash, Jump, Dust R, Effects, Dust L, Sounds, Charm Effects, UpSlash, Wallslide Dust, Lines Anim,
+ SD Ground 2, WallSlash, Darkness Border, Damage Effect, Warp Out Pt, Warp Fail Pt, SlugWalk, Swim, RC 2, TakeHit, Particle 1, Dash, Dream Effects,
+ Scr Orbs 2, Nail Art Charge, BackDash, SD Ground 1, Clash Tink, SD Crystal Gen W2, Shadow Dash Blobs, Shell Anim, Fall Trail, Blocker Shield,
+ Wallslide, SD Crystal Burst W, Burst Rocks, RC 1, SD Pulse Pt, Charge Audio, Leak, FootstepsRun, SD Crystal Gen G2, Geo Get, 
+ game completion, game completion title, Percent_title, credits object, blanker, any button to continue, 
+ Award Achievements, credits fleur (1), _Managers, _SceneManager, PlayMaker Unity 2D, light_beam_particles 3, 
+ Ending Sting, Time_title, vignette_smaller_v01, time_num, Cutscene Blanker, percentage_num, far_bg
+
+
+Randomized locations: Lore_Tablet-City_Entrance, Lore_Tablet-Pleasure_House, Lore_Tablet-Sanctum_Entrance, Lore_Tablet-Sanctum_Past_Soul_Master,
+Lore_Tablet-Watcher's_Spire, Lore_Tablet-Archives_Upper, Lore_Tablet-Archives_Left, Lore_Tablet-Archives_Right, Lore_Tablet-Pilgrim's_Way_1, 
+Lore_Tablet-Pilgrim's_Way_2, Lore_Tablet-Mantis_Outskirts, Lore_Tablet-Mantis_Village, Lore_Tablet-Greenpath_Upper_Hidden, Lore_Tablet-Greenpath_Below_Toll, 
+Lore_Tablet-Greenpath_Lifeblood, Lore_Tablet-Greenpath_Stag, Lore_Tablet-Greenpath_QG, Lore_Tablet-Greenpath_Lower_Hidden, Lore_Tablet-Dung_Defender,
+Lore_Tablet-Spore_Shroom, Lore_Tablet-Fungal_Wastes_Hidden, Lore_Tablet-Fungal_Wastes_Below_Shrumal_Ogres, Lore_Tablet-Fungal_Core, Lore_Tablet-Ancient_Basin,
+Lore_Tablet-King's_Pass_Focus, Lore_Tablet-King's_Pass_Fury, Lore_Tablet-King's_Pass_Exit, Lore_Tablet-Howling_Cliffs, Lore_Tablet-Kingdom's_Edge,
+Sly, Sly_(Key), Iselda, Salubra, Leg_Eater
+
+[INFO]:[RandoStats:TotalChecksSeen] - Sly is randomized and found, adjusting count
+[INFO]:[RandoStats:TotalChecksSeen] - Sly_(Key) is randomized and found, adjusting count
+[INFO]:[RandoStats:TotalChecksSeen] - Iselda is randomized and found, adjusting count
+[INFO]:[RandoStats:TotalChecksSeen] - Adding count for the following found items at Iselda:
+[INFO]:[RandoStats:TotalChecksSeen] - Salubra is randomized and found, adjusting count
+[INFO]:[RandoStats:TotalChecksSeen] - Adding count for the following found items at Salubra: 
+[INFO]:[RandoStats:TotalChecksSeen] - Leg_Eater is randomized and found, adjusting count
+[INFO]:[RandoStats:TotalChecksSeen] - Adding count for the following found items at Leg_Eater:
+[INFO]:[RandoStats:TotalChecksSeen] - Sly is randomized , adjusting count
+[INFO]:[RandoStats:TotalChecksSeen] - Adding count for the following  items at Sly: Arcane_Egg-Birthplace, Mask_Shard-Brooding_Mawlek, Soul_Totem-Sanctum_Below_Chest, Mask_Shard-Sly3, Soul_Totem-Crystal_Heart_1, Steady_Body
+[INFO]:[RandoStats:TotalChecksSeen] - Sly_(Key) is randomized , adjusting count
+[INFO]:[RandoStats:TotalChecksSeen] - Adding count for the following  items at Sly_(Key): Soul_Totem-White_Palace_Entrance, Collector's_Map, Vessel_Fragment-Sly1, Mask_Shard-Waterways, Wanderer's_Journal-Cliffs, Vessel_Fragment-Greenpath
+[INFO]:[RandoStats:TotalChecksSeen] - Iselda is randomized , adjusting count
+[INFO]:[RandoStats:TotalChecksSeen] - Adding count for the following  items at Iselda: Soul_Totem-Hallownest_Crown, Wanderer's_Journal-Above_Mantis_Village, Hallownest_Seal-Queen's_Station, Soul_Totem-Upper_Crystal_Peak, Soul_Totem-Fungal_Core, Vessel_Fragment-Sly2
+[INFO]:[RandoStats:TotalChecksSeen] - Salubra is randomized , adjusting count
+[INFO]:[RandoStats:TotalChecksSeen] - Adding count for the following  items at Salubra: Soul_Totem-Pilgrim's_Way, Charm_Notch-Colosseum, Hallownest_Seal-King's_Station, Baldur_Shell, Soul_Totem-Crossroads_Acid, Soul_Catcher
+[INFO]:[RandoStats:TotalChecksSeen] - Leg_Eater is randomized , adjusting count
+[INFO]:[RandoStats:TotalChecksSeen] - Adding count for the following  items at Leg_Eater: Soul_Totem-Path_of_Pain_Left_of_Lever, Soul_Totem-Path_of_Pain_Entrance, Soul_Totem-Kingdom's_Edge_Camp, Lifeblood_Cocoon-Mantis_Village
+

@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<TargetFramework>net35</TargetFramework>
+		<AssemblyTitle>RandoStats</AssemblyTitle>
+		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<DebugType>portable</DebugType>
+		<Copyright>Copyright © 2021</Copyright>
+		<OutputPath>bin\$(Configuration)</OutputPath>
+		<LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
+		<HollowKnightRefs>D:\Program Files\Downpatching\Hollow Knight\1.4.3.2 Modded\hollow_knight_Data\Managed</HollowKnightRefs>
+		<AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+		<AssemblyName>Rando3Stats</AssemblyName>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <Optimize>false</Optimize>
+	  <DefineConstants>DEBUG;TRACE</DefineConstants>
+	  <DebugSymbols>true</DebugSymbols>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <Optimize>true</Optimize>
+	  <DebugSymbols>false</DebugSymbols>
+	</PropertyGroup>
+	<ItemGroup>
+	<Reference Include="Assembly-CSharp">
+		<HintPath>$(HollowKnightRefs)/Assembly-CSharp.dll</HintPath>
+		<Private>false</Private>
+	</Reference>
+	<Reference Include="PlayMaker">
+		<HintPath>$(HollowKnightRefs)/PlayMaker.dll</HintPath>
+		<Private>false</Private>
+	</Reference>
+	<Reference Include="RandomizerMod3.0">
+		<HintPath>$(HollowKnightRefs)\Mods\RandomizerMod3.0.dll</HintPath>
+		<Private>false</Private>
+	</Reference>
+	<Reference Include="SereCore">
+		<HintPath>$(HollowKnightRefs)\Mods\SereCore.dll</HintPath>
+		<Private>false</Private>
+	</Reference>
+	<Reference Include="UnityEngine">
+		<HintPath>$(HollowKnightRefs)\UnityEngine.dll</HintPath>
+		<Private>False</Private>
+	</Reference>
+	<Reference Include="UnityEngine.AnimationModule">
+		<HintPath>$(HollowKnightRefs)\UnityEngine.AnimationModule.dll</HintPath>
+		<Private>False</Private>
+	</Reference>
+	<Reference Include="UnityEngine.CoreModule">
+		<HintPath>$(HollowKnightRefs)\UnityEngine.CoreModule.dll</HintPath>
+		<Private>False</Private>
+	</Reference>
+	<Reference Include="UnityEngine.ImageConversionModule">
+		<HintPath>$(HollowKnightRefs)\UnityEngine.ImageConversionModule.dll</HintPath>
+		<Private>False</Private>
+	</Reference>
+	<Reference Include="UnityEngine.JSONSerializeModule">
+		<HintPath>$(HollowKnightRefs)\UnityEngine.JSONSerializeModule.dll</HintPath>
+		<Private>False</Private>
+	</Reference>
+	<Reference Include="UnityEngine.TextRenderingModule">
+		<HintPath>$(HollowKnightRefs)\UnityEngine.TextRenderingModule.dll</HintPath>
+		<Private>False</Private>
+	</Reference>
+	<Reference Include="UnityEngine.UI">
+		<HintPath>$(HollowKnightRefs)\UnityEngine.UI.dll</HintPath>
+		<Private>False</Private>
+	</Reference>
+	<Reference Include="UnityEngine.UIModule">
+		<HintPath>$(HollowKnightRefs)\UnityEngine.UIModule.dll</HintPath>
+		<Private>False</Private>
+	</Reference>
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="notes.txt">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <Exec Command="copy /v /y &quot;$(OutDir)Rando3Stats.dll&quot; &quot;$(HollowKnightRefs)\Mods&quot;" />
+	</Target>
+</Project>
