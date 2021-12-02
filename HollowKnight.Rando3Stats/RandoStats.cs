@@ -28,7 +28,7 @@ namespace HollowKnight.Rando3Stats
 
         public override string GetVersion()
         {
-            string ver = "0.1.0";
+            string ver = "1.0.0";
             int minAPI = 45;
 
             bool apiTooLow = Convert.ToInt32(ModHooks.Instance.ModVersion.Split('-')[1]) < minAPI;
@@ -79,6 +79,8 @@ namespace HollowKnight.Rando3Stats
                 holdToSkipLock = false;
                 GameObject canvas = GuiManager.Instance.GetCanvasForScene("StatsCanvas");
 
+                Log("Calculating statistics");
+
                 IRandomizerStatistic totalStats = new TotalChecksSeen("Total");
                 Layout totalChecksStat = GetStackedLabeledText(canvas, totalStats.GetHeader(), totalStats.GetDisplay());
 
@@ -98,6 +100,8 @@ namespace HollowKnight.Rando3Stats
                 statGrouping.Children.Add(new CenteredText(canvas, "Random Checks Found", GuiManager.Instance.TrajanBold, 25));
                 statGrouping.Children.Add(totalChecksStat);
                 statGrouping.Children.Add(statGridGroup);
+
+                Log("Starting layout step.");
 
                 statGrouping.DoLayout(new Vector2(10, 20));
 

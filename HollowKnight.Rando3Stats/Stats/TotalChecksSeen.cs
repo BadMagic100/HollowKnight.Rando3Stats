@@ -8,10 +8,8 @@ namespace HollowKnight.Rando3Stats.Stats
 {
     public class TotalChecksSeen : PercentageStatistic
     {
-        private SimpleLogger log;
         public TotalChecksSeen(string label) : base(label)
         {
-            log = new SimpleLogger("RandoStats:TotalChecksSeen");
         }
 
         private int AdjustCountForShops(int initialCount, HashSet<string> randomizedLocations, bool countAll)
@@ -26,12 +24,10 @@ namespace HollowKnight.Rando3Stats.Stats
                     // we should only do this if we found the location (i.e. bought at least 1 item)
                     if (countAll || Rando.Instance.Settings.CheckLocationFound(shop))
                     {
-                        log.Log($"{shop} is randomized{(countAll ? "" : " and found")}, adjusting count");
                         count--;
                     }
                     IEnumerable<string> itemsToCount = Rando.Instance.Settings.GetAllItemsPlacedAt(shop)
                         .Where(x => countAll || Rando.Instance.Settings.CheckItemFound(x));
-                    log.Log($"Adding count for the following {itemsToCount.Count()}{(countAll ? "" : " found")} items at {shop}: {string.Join(", ", itemsToCount.ToArray())}");
                     count += itemsToCount.Count();
                 }
             }
@@ -54,7 +50,6 @@ namespace HollowKnight.Rando3Stats.Stats
         public override int GetTotal()
         {
             HashSet<string> locations = ItemManager.GetRandomizedLocations();
-            log.Log("Randomized locations: " + string.Join(", ", locations.ToArray()));
             int totalCounter = locations.Count;
             if (RandoStats.Instance?.Settings.CountShopItemsIndividually == true)
             {

@@ -11,7 +11,7 @@
 		<Nullable>enable</Nullable>
 		<HollowKnightRefs>D:\Program Files\Downpatching\Hollow Knight\1.4.3.2 Modded\hollow_knight_Data\Managed</HollowKnightRefs>
 		<AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
-		<AssemblyName>Rando3Stats</AssemblyName>
+		<AssemblyName>RandoStats</AssemblyName>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 	  <Optimize>false</Optimize>
@@ -78,6 +78,6 @@
 	  </None>
 	</ItemGroup>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-	  <Exec Command="copy /v /y &quot;$(OutDir)Rando3Stats.dll&quot; &quot;$(HollowKnightRefs)\Mods&quot;" />
+	  <Exec Command="copy /v /y &quot;$(OutDir)RandoStats.dll&quot; &quot;$(HollowKnightRefs)\Mods&quot;" />
 	</Target>
 </Project>
