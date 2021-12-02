@@ -2,6 +2,8 @@
 Rando3Stats is a Hollow Knight mod used with Randomizer mod. It provides detailed statistics about your obtained checks on the completion screen after the credits,
 and changes that screen's behavior from "press any button" to "hold any button" to prevent accidentally skipping it.
 
+![Image of the mod in action](/readme-assets/EndScreenV1.jpg)
+
 This mod is *tested* to be compatible with the following:
 * Randomizer 3.13(288) - this is the current Randomizer version. If you're not using it... why?
 * Randomizer ItemSync 1.3.0
