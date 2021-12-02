@@ -13,7 +13,14 @@ namespace HollowKnight.Rando3Stats
         public static RandoStats? Instance { get; private set; }
 
         private const string END_GAME_COMPLETION = "End_Game_Completion";
-        private const float lengthOfPressToSkip = 1.5f;
+        private const float LENGTH_OF_PRESS_TO_SKIP = 1.5f;
+
+        private const float VERTICAL_SPACING = 10;
+        private const float HORIZONTAL_SPACING = 15;
+
+        private const int FONT_SIZE_H1 = 25;
+        private const int FONT_SIZE_H2 = 18;
+        private const int FONT_SIZE_H3 = 15;
 
         private float pressStartTime = 0;
         private bool holdToSkipLock = false;
@@ -84,9 +91,9 @@ namespace HollowKnight.Rando3Stats
                 IRandomizerStatistic totalStats = new TotalChecksSeen("Total");
                 Layout totalChecksStat = GetStackedLabeledText(canvas, totalStats.GetHeader(), totalStats.GetDisplay());
 
-                Layout statGridGroup = new DynamicGridLayout(15, 10, 2, HorizontalAlignment.Center);
+                Layout statGridGroup = new DynamicGridLayout(HORIZONTAL_SPACING, VERTICAL_SPACING, 2, HorizontalAlignment.Center);
 
-                foreach (ChecksSeenByPoolGroup poolStat in ChecksSeenByPoolGroup.GetAllPoolGroups())
+                foreach (LocationsSeenByPoolGroup poolStat in LocationsSeenByPoolGroup.GetAllPoolGroups())
                 {
                     if (poolStat.IsEnabled)
                     {
@@ -96,8 +103,8 @@ namespace HollowKnight.Rando3Stats
                 IRandomizerStatistic shops = new GeoShopChecksSeen("Geo Shops");
                 statGridGroup.Children.Add(GetStackedLabeledText(canvas, shops.GetHeader(), shops.GetDisplay()));
 
-                Layout statGrouping = new VerticalStackLayout(10f);
-                statGrouping.Children.Add(new CenteredText(canvas, "Locations Found", GuiManager.Instance.TrajanBold, 25));
+                Layout statGrouping = new VerticalStackLayout(VERTICAL_SPACING);
+                statGrouping.Children.Add(new CenteredText(canvas, "Locations Found", GuiManager.Instance.TrajanBold, FONT_SIZE_H1));
                 statGrouping.Children.Add(totalChecksStat);
                 statGrouping.Children.Add(statGridGroup);
 
@@ -106,8 +113,7 @@ namespace HollowKnight.Rando3Stats
                 statGrouping.DoLayout(new Vector2(10, 20));
 
                 CenteredRect r = new(canvas, Color.white, new(40, 40), "ProgressRect");
-                r.DoMeasure();
-                r.DoArrange(new(960, 1060, 0, 0));
+                new Container(r).DoLayout(new Vector2(960, 1060));
             }
             orig(self);
         }
@@ -132,7 +138,7 @@ namespace HollowKnight.Rando3Stats
                     {
                         pressStartTime = Time.time;
                     }
-                    else if (Time.time > pressStartTime + lengthOfPressToSkip)
+                    else if (Time.time > pressStartTime + LENGTH_OF_PRESS_TO_SKIP)
                     {
                         // we've elapsed the designated time while held; we can now skip the cutscene.
                         // we should now further block the hold-to-skip behavior and animation until the next
@@ -142,7 +148,7 @@ namespace HollowKnight.Rando3Stats
                         // fade our stuff out too
                         GameObject.Find("StatsCanvas").AddComponent<CanvasGroupLinearFade>().duration = 0.5f;
                     }
-                    float progressPercentage = (Time.time - pressStartTime) / lengthOfPressToSkip;
+                    float progressPercentage = (Time.time - pressStartTime) / LENGTH_OF_PRESS_TO_SKIP;
                     float desiredWidth = GuiManager.ReferenceSize.x * progressPercentage;
                     float scale = desiredWidth / tx.sizeDelta.x;
                     tx.SetScaleX(scale);
@@ -158,8 +164,8 @@ namespace HollowKnight.Rando3Stats
         private Layout GetStackedLabeledText(GameObject canvas, string header, string text)
         {
             Layout statStack = new VerticalStackLayout(5f, HorizontalAlignment.Center);
-            statStack.Children.Add(new CenteredText(canvas, header, GuiManager.Instance.TrajanBold, 18, "Stat_" + header));
-            statStack.Children.Add(new CenteredText(canvas, text, GuiManager.Instance.TrajanNormal, 15, "StatValue_" + header));
+            statStack.Children.Add(new CenteredText(canvas, header, GuiManager.Instance.TrajanBold, FONT_SIZE_H2, "Stat_" + header));
+            statStack.Children.Add(new CenteredText(canvas, text, GuiManager.Instance.TrajanNormal, FONT_SIZE_H3, "StatValue_" + header));
             return statStack;
         }
 
