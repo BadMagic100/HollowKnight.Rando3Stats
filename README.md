@@ -26,16 +26,16 @@ https://github.com/Shadudev/HollowKnight.MultiWorld
 
 * Prevents mashing through the completion screen - replaces press to skip with a 1.5 second hold.
 * Available Stats
-  * Randomized Checks Obtained
-    * This stat is the number of randomized locations checked that you've actually obtained. There is a
+  * Randomized Locations Checked
+    * This stat is the number of randomized locations that you've checked and obtained. There is a
       stat for total locations overall, as well as one each per randomized pool. Some smaller pools are
       merged under larger categories (i.e. split claw and split cloak are merged into skills, Palace checks
       are merged into the corresponding overworld categories).
     * By default, each item at Geo Shops (Sly, Salubra, Iselda, Leg Eater) counts as a check. You can
       change this behavior by changing the global setting CountShopItemsIndividually to false. In this case,
       each shop pool as a whole counts as a single check, for a total of 5 (Sly (Key) is separate from Sly).
-  * ItemSync - Checks obtained locally (coming soon)
-    * This stat is the number of randomized locations YOU obtained
+  * ItemSync - Locations checked locally (coming soon)
+    * This stat is the number of randomized locations YOU obtained, as opposed to your teammate(s)
   * If you have an idea for a new stat, cutting an issue here or finding me in the HK speedrunning Discord
     will be your best ways to make it happen - if you're code-savvy, feel free to open a PR as well.
 

@@ -97,7 +97,7 @@ namespace HollowKnight.Rando3Stats
                 statGridGroup.Children.Add(GetStackedLabeledText(canvas, shops.GetHeader(), shops.GetDisplay()));
 
                 Layout statGrouping = new VerticalStackLayout(10f);
-                statGrouping.Children.Add(new CenteredText(canvas, "Random Checks Found", GuiManager.Instance.TrajanBold, 25));
+                statGrouping.Children.Add(new CenteredText(canvas, "Locations Found", GuiManager.Instance.TrajanBold, 25));
                 statGrouping.Children.Add(totalChecksStat);
                 statGrouping.Children.Add(statGridGroup);
 
