@@ -53,9 +53,10 @@ https://github.com/Shadudev/HollowKnight.MultiWorld
   * Room rando stats - transitions found (total/by area)
   * Multiworld compatibility
   * Stat extensions to integrate with ItemSync and Multiworld
+* It is currently not possible to view stats without getting an ending first (e.g. in lockout or 3-line races).
   
 ## Acknowledgements
 
-* The Hollow Knight Speedrun Discord, for inspiring the idea
+* The Hollow Knight Speedrun Discord, for inspiring the idea and generally being a cool place.
 * Phenomenol and the HK Modding Discord for helping me get started on my first HK mod and get integrated
   with Rando.
