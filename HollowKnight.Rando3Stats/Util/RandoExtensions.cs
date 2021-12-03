@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace HollowKnight.Rando3Stats
+namespace HollowKnight.Rando3Stats.Util
 {
     public static class RandoExtensions
     {

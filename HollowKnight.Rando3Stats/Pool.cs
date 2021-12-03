@@ -36,7 +36,7 @@ namespace HollowKnight.Rando3Stats
 
         public static Pool WhisperingRoots => new("Root", () => Rando.Instance.Settings.RandomizeWhisperingRoots);
 
-        public static Pool Grubs => new("Grub", () => Rando.Instance.Settings.RandomizeGrubs);
+        public static Pool GrubLocations => new("Grub", () => Rando.Instance.Settings.RandomizeGrubs);
 
         public static Pool Lifeblood => new("Cocoon", () => Rando.Instance.Settings.RandomizeLifebloodCocoons);
 
@@ -53,7 +53,7 @@ namespace HollowKnight.Rando3Stats
         public static Pool PalaceLore => new("PalaceLore", () => Rando.Instance.Settings.RandomizePalaceTablets);
 
         // focus check is at the same location as the lore check, so it doesn't get placed if lore tablets are rando'd
-        public static Pool Focus => new("Focus", () => Rando.Instance.Settings.RandomizeFocus && !Rando.Instance.Settings.RandomizeLoreTablets);
+        public static Pool FocusLocation => new("Focus", () => Rando.Instance.Settings.RandomizeFocus && !Rando.Instance.Settings.RandomizeLoreTablets);
 
         public static Pool GrimmkinFlames => new("Flame", () => Rando.Instance.Settings.RandomizeGrimmkinFlames);
 
@@ -67,11 +67,11 @@ namespace HollowKnight.Rando3Stats
 
         public static Pool SplitClaw => new("SplitClaw", () => Rando.Instance.Settings.RandomizeClawPieces);
 
-        public static Pool SplitCloak => new("SplitCloakLocation", () => Rando.Instance.Settings.RandomizeCloakPieces);
+        public static Pool SplitCloakLocation => new("SplitCloakLocation", () => Rando.Instance.Settings.RandomizeCloakPieces);
 
         public static Pool EggShop => new("EggShopLocation", () => Rando.Instance.Settings.EggShop);
 
-        public static Pool Mimics => new("Mimic", () => Rando.Instance.Settings.RandomizeMimics);
+        public static Pool MimicLocations => new("Mimic", () => Rando.Instance.Settings.RandomizeMimics);
 
         public static Pool ElevatorPass => new("ElevatorPass", () => Rando.Instance.Settings.ElevatorPass);
 

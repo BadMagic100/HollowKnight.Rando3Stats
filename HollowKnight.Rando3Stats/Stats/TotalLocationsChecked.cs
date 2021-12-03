@@ -1,4 +1,4 @@
-﻿using Modding;
+﻿using HollowKnight.Rando3Stats.Util;
 using RandomizerMod.Randomization;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,9 +6,9 @@ using Rando = RandomizerMod.RandomizerMod;
 
 namespace HollowKnight.Rando3Stats.Stats
 {
-    public class TotalChecksSeen : PercentageStatistic
+    public class TotalLocationsChecked : PercentageStatistic
     {
-        public TotalChecksSeen(string label) : base(label)
+        public TotalLocationsChecked(string label) : base(label)
         {
         }
 

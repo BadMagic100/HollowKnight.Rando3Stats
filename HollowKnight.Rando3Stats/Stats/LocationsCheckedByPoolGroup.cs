@@ -4,11 +4,11 @@ using Rando = RandomizerMod.RandomizerMod;
 
 namespace HollowKnight.Rando3Stats.Stats
 {
-    public class LocationsSeenByPoolGroup : PercentageStatistic
+    public class LocationsCheckedByPoolGroup : PercentageStatistic
     {
-        public static LocationsSeenByPoolGroup[] GetAllPoolGroups()
+        public static LocationsCheckedByPoolGroup[] GetAllPoolGroups()
         {
-            return new LocationsSeenByPoolGroup[]
+            return new LocationsCheckedByPoolGroup[]
                 {
                     new(LogicalPoolGrouping.Dreamers),
                     new(LogicalPoolGrouping.Skills),
@@ -44,7 +44,7 @@ namespace HollowKnight.Rando3Stats.Stats
             get => pools.IsEnabled;
         }
 
-        public LocationsSeenByPoolGroup(LogicalPoolGrouping pools) : base(pools.Name)
+        public LocationsCheckedByPoolGroup(LogicalPoolGrouping pools) : base(pools.Name)
         {
             this.pools = pools;
         }

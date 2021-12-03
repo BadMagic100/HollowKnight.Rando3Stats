@@ -8,7 +8,7 @@ namespace HollowKnight.Rando3Stats
     public class LogicalPoolGrouping
     {
         public static LogicalPoolGrouping Dreamers => new("Dreamers", Pool.Dreamers);
-        public static LogicalPoolGrouping Skills => new("Skills", Pool.Skills, Pool.SplitClaw, Pool.SplitCloak);
+        public static LogicalPoolGrouping Skills => new("Skills", Pool.Skills, Pool.SplitClaw, Pool.SplitCloakLocation);
         public static LogicalPoolGrouping Charms => new("Charms", Pool.Charms);
         public static LogicalPoolGrouping Keys => new("Keys", Pool.Keys, Pool.ElevatorPass);
         public static LogicalPoolGrouping MaskShards => new("Mask Shards", Pool.MaskShards);
@@ -21,10 +21,10 @@ namespace HollowKnight.Rando3Stats
         public static LogicalPoolGrouping StagStations => new("Stag Stations", Pool.Stags);
         public static LogicalPoolGrouping Maps => new("Maps", Pool.Maps);
         public static LogicalPoolGrouping WhisperingRoots => new("Whispering Roots", Pool.WhisperingRoots);
-        public static LogicalPoolGrouping Grubs => new("Grubs", Pool.Grubs, Pool.Mimics);
+        public static LogicalPoolGrouping Grubs => new("Grubs", Pool.GrubLocations, Pool.MimicLocations);
         public static LogicalPoolGrouping Lifeblood => new("Lifeblood", Pool.Lifeblood);
         public static LogicalPoolGrouping SoulTotems => new("Soul Totems", Pool.SoulTotems, Pool.PalaceTotems);
-        public static LogicalPoolGrouping LoreTablets => new("Lore Tablets", Pool.LoreTablets, Pool.PalaceLore, Pool.Focus);
+        public static LogicalPoolGrouping LoreTablets => new("Lore Tablets", Pool.LoreTablets, Pool.PalaceLore, Pool.FocusLocation);
         public static LogicalPoolGrouping JournalEntries => new("Journal Entries", Pool.HunterJournal, Pool.PalaceJournal);
         public static LogicalPoolGrouping GrimmFlames => new("Grimm Flames", Pool.GrimmkinFlames);
         public static LogicalPoolGrouping GeoRocks => new("Geo Rocks", Pool.GeoRocks);

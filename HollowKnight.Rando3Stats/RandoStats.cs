@@ -3,6 +3,7 @@ using HollowKnight.Rando3Stats.UI;
 using Modding;
 using SereCore;
 using System;
+using System.Reflection;
 using UnityEngine;
 using Rando = RandomizerMod.RandomizerMod;
 
@@ -83,30 +84,41 @@ namespace HollowKnight.Rando3Stats
             bool isRando = Rando.Instance.Settings.Randomizer;
             if (isRando)
             {
+                // we don't need to see the recent items panel on the end screen, clear it out to make more room for stats!
+                Assembly randoAsm = Assembly.GetAssembly(typeof(Rando));
+                Type recents = randoAsm.GetType("RandomizerMod.RecentItems");
+                MethodInfo hideRecents = recents.GetMethod("Hide", BindingFlags.Public | BindingFlags.Static);
+                hideRecents.Invoke(null, null);
+
                 holdToSkipLock = false;
                 GameObject canvas = GuiManager.Instance.GetCanvasForScene("StatsCanvas");
 
                 Log("Calculating statistics");
 
-                IRandomizerStatistic totalStats = new TotalChecksSeen("Total");
-                Layout totalChecksStat = GetStackedLabeledText(canvas, totalStats.GetHeader(), totalStats.GetDisplay());
+                IRandomizerStatistic totalLocationStat = new TotalLocationsChecked("Total");
+                Layout totalLocationStatText = GetStatText(canvas, totalLocationStat);
 
-                Layout statGridGroup = new DynamicGridLayout(HORIZONTAL_SPACING, VERTICAL_SPACING, 2, HorizontalAlignment.Center);
+                IRandomizerStatistic totalItemStat = new TotalItemsObtained("Total");
+                Layout totalItemStatText = GetStatText(canvas, totalItemStat);
 
-                foreach (LocationsSeenByPoolGroup poolStat in LocationsSeenByPoolGroup.GetAllPoolGroups())
+                Layout locationPoolStatGroup = new DynamicGridLayout(HORIZONTAL_SPACING, VERTICAL_SPACING, 2, HorizontalAlignment.Center);
+
+                foreach (LocationsCheckedByPoolGroup poolStat in LocationsCheckedByPoolGroup.GetAllPoolGroups())
                 {
                     if (poolStat.IsEnabled)
                     {
-                        statGridGroup.Children.Add(GetStackedLabeledText(canvas, poolStat.GetHeader(), poolStat.GetDisplay()));
+                        locationPoolStatGroup.Children.Add(GetStatText(canvas, poolStat));
                     }
                 }
-                IRandomizerStatistic shops = new GeoShopChecksSeen("Geo Shops");
-                statGridGroup.Children.Add(GetStackedLabeledText(canvas, shops.GetHeader(), shops.GetDisplay()));
+                IRandomizerStatistic geoShopLocationStat = new GeoShopChecksSeen("Geo Shops");
+                locationPoolStatGroup.Children.Add(GetStatText(canvas, geoShopLocationStat));
 
                 Layout statGrouping = new VerticalStackLayout(VERTICAL_SPACING);
                 statGrouping.Children.Add(new CenteredText(canvas, "Locations Found", GuiManager.Instance.TrajanBold, FONT_SIZE_H1));
-                statGrouping.Children.Add(totalChecksStat);
-                statGrouping.Children.Add(statGridGroup);
+                statGrouping.Children.Add(totalLocationStatText);
+                statGrouping.Children.Add(locationPoolStatGroup);
+                statGrouping.Children.Add(new CenteredText(canvas, "Items Obtained", GuiManager.Instance.TrajanBold, FONT_SIZE_H1));
+                statGrouping.Children.Add(totalItemStatText);
 
                 Log("Starting layout step.");
 
@@ -131,7 +143,14 @@ namespace HollowKnight.Rando3Stats
                 if (holdToSkipLock) return;
 
                 bool held = Input.anyKey || self.gameController.AnyButton.IsPressed;
-                RectTransform tx = GameObject.Find("ProgressRect").GetComponent<RectTransform>();
+                RectTransform? tx = GameObject.Find("ProgressRect")?.GetComponent<RectTransform>();
+                // if we can't find this, something has gone really badly in the setup, revert to default behavior so we're not softlocked here
+                if (tx == null)
+                {
+                    orig(self);
+                    return;
+                }
+
                 if (held)
                 {
                     if (pressStartTime <= float.Epsilon)
@@ -161,8 +180,10 @@ namespace HollowKnight.Rando3Stats
             }
         }
 
-        private Layout GetStackedLabeledText(GameObject canvas, string header, string text)
+        private Layout GetStatText(GameObject canvas, IRandomizerStatistic stat)
         {
+            string header = stat.GetHeader();
+            string text = stat.GetDisplay();
             Layout statStack = new VerticalStackLayout(5f, HorizontalAlignment.Center);
             statStack.Children.Add(new CenteredText(canvas, header, GuiManager.Instance.TrajanBold, FONT_SIZE_H2, "Stat_" + header));
             statStack.Children.Add(new CenteredText(canvas, text, GuiManager.Instance.TrajanNormal, FONT_SIZE_H3, "StatValue_" + header));

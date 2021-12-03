@@ -1,4 +1,5 @@
-﻿using RandomizerMod.Randomization;
+﻿using HollowKnight.Rando3Stats.Util;
+using RandomizerMod.Randomization;
 using System.Linq;
 using Rando = RandomizerMod.RandomizerMod;
 

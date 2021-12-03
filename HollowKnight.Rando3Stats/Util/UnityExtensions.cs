@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace HollowKnight.Rando3Stats
+namespace HollowKnight.Rando3Stats.Util
 {
     public static class UnityExtensions
     {
