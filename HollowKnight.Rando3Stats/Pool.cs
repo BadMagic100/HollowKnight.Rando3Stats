@@ -184,14 +184,14 @@ namespace HollowKnight.Rando3Stats
         public static Pool EggShopGeo => new("EggShopLocation", () => Rando.Instance.Settings.EggShop);
 
         /// <summary>
-        /// Mimic locations.
+        /// Mimic locations. Apparently only counts if grubs are also on
         /// </summary>
-        public static Pool MimicLocationOnly => new("Mimic", () => Rando.Instance.Settings.RandomizeMimics);
+        public static Pool MimicLocationOnly => new("Mimic", () => Rando.Instance.Settings.RandomizeGrubs && Rando.Instance.Settings.RandomizeMimics);
 
         /// <summary>
         /// Mimic items (jars/shinies)
         /// </summary>
-        public static Pool MimicItemOnly => new("MimicItem", () => Rando.Instance.Settings.RandomizeMimics);
+        public static Pool MimicItemOnly => new("MimicItem", () => Rando.Instance.Settings.RandomizeGrubs && Rando.Instance.Settings.RandomizeMimics);
 
         /// <summary>
         /// The elevator pass location (elevator toll) and item.

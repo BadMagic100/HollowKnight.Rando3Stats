@@ -18,7 +18,7 @@ namespace HollowKnight.Rando3Stats.Stats
                     new(LogicalPoolGrouping.VesselFragments),
                     new(LogicalPoolGrouping.PaleOre),
                     new(LogicalPoolGrouping.CharmNotches),
-                    new(LogicalPoolGrouping.ChestLocations),
+                    new(LogicalPoolGrouping.Chests),
                     new(LogicalPoolGrouping.Relics),
                     new(LogicalPoolGrouping.RancidEggs),
                     new(LogicalPoolGrouping.StagStations),
@@ -45,6 +45,11 @@ namespace HollowKnight.Rando3Stats.Stats
         }
 
         public LocationsCheckedByPoolGroup(LogicalPoolGrouping pools) : base(pools.Name)
+        {
+            poolGroup = pools;
+        }
+
+        public LocationsCheckedByPoolGroup(string alternateName, LogicalPoolGrouping pools) : base(alternateName)
         {
             poolGroup = pools;
         }

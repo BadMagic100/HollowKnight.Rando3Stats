@@ -21,7 +21,7 @@ namespace HollowKnight.Rando3Stats.Stats
                     new(LogicalPoolGrouping.VesselFragments),
                     new(LogicalPoolGrouping.PaleOre),
                     new(LogicalPoolGrouping.CharmNotches),
-                    new(LogicalPoolGrouping.ChestItems),
+                    new(LogicalPoolGrouping.Chests),
                     new(LogicalPoolGrouping.Relics),
                     new(LogicalPoolGrouping.RancidEggs),
                     new(LogicalPoolGrouping.StagStations),
@@ -36,7 +36,7 @@ namespace HollowKnight.Rando3Stats.Stats
                     new(LogicalPoolGrouping.GeoRocks),
                     new(LogicalPoolGrouping.BossGeo),
                     new(LogicalPoolGrouping.BossEssence),
-                    new(LogicalPoolGrouping.EggShop),
+                    new("Egg Shop Geo", LogicalPoolGrouping.EggShop),
                     new(LogicalPoolGrouping.CursedJunkItems)
                 };
         }
@@ -49,6 +49,11 @@ namespace HollowKnight.Rando3Stats.Stats
         }
 
         public ItemsObtainedByPoolGroup(LogicalPoolGrouping pools) : base(pools.Name)
+        {
+            poolGroup = pools;
+        }
+
+        public ItemsObtainedByPoolGroup(string alternateName, LogicalPoolGrouping pools) : base(alternateName)
         {
             poolGroup = pools;
         }
