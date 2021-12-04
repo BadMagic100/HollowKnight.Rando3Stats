@@ -16,6 +16,9 @@ namespace HollowKnight.Rando3Stats
         private const string END_GAME_COMPLETION = "End_Game_Completion";
         private const float LENGTH_OF_PRESS_TO_SKIP = 1.5f;
 
+        private const float HORIZONTAL_PADDING = 10;
+        private const float VERTICAL_PADDING = 20;
+
         private const float VERTICAL_SPACING = 10;
         private const float HORIZONTAL_SPACING = 15;
 
@@ -102,7 +105,6 @@ namespace HollowKnight.Rando3Stats
                 Layout totalItemStatText = GetStatText(canvas, totalItemStat);
 
                 Layout locationPoolStatGroup = new DynamicGridLayout(HORIZONTAL_SPACING, VERTICAL_SPACING, 2, HorizontalAlignment.Center);
-
                 foreach (LocationsCheckedByPoolGroup poolStat in LocationsCheckedByPoolGroup.GetAllPoolGroups())
                 {
                     if (poolStat.IsEnabled)
@@ -113,16 +115,29 @@ namespace HollowKnight.Rando3Stats
                 IRandomizerStatistic geoShopLocationStat = new GeoShopChecksSeen("Geo Shops");
                 locationPoolStatGroup.Children.Add(GetStatText(canvas, geoShopLocationStat));
 
-                Layout statGrouping = new VerticalStackLayout(VERTICAL_SPACING);
-                statGrouping.Children.Add(new CenteredText(canvas, "Locations Found", GuiManager.Instance.TrajanBold, FONT_SIZE_H1));
-                statGrouping.Children.Add(totalLocationStatText);
-                statGrouping.Children.Add(locationPoolStatGroup);
-                statGrouping.Children.Add(new CenteredText(canvas, "Items Obtained", GuiManager.Instance.TrajanBold, FONT_SIZE_H1));
-                statGrouping.Children.Add(totalItemStatText);
+                Layout itemPoolStatGroup = new DynamicGridLayout(HORIZONTAL_SPACING, VERTICAL_SPACING, 2, HorizontalAlignment.Center);
+                foreach (ItemsObtainedByPoolGroup poolStat in ItemsObtainedByPoolGroup.GetAllPoolGroups())
+                {
+                    if (poolStat.IsEnabled)
+                    {
+                        itemPoolStatGroup.Children.Add(GetStatText(canvas, poolStat));
+                    }
+                }
+
+                Layout statGroupTopLeft = new VerticalStackLayout(VERTICAL_SPACING);
+                statGroupTopLeft.Children.Add(new CenteredText(canvas, "Locations Found", GuiManager.Instance.TrajanBold, FONT_SIZE_H1));
+                statGroupTopLeft.Children.Add(totalLocationStatText);
+                statGroupTopLeft.Children.Add(locationPoolStatGroup);
+
+                Layout statGroupTopRight = new VerticalStackLayout(VERTICAL_SPACING, HorizontalAlignment.Right);
+                statGroupTopRight.Children.Add(new CenteredText(canvas, "Items Obtained", GuiManager.Instance.TrajanBold, FONT_SIZE_H1));
+                statGroupTopRight.Children.Add(totalItemStatText);
+                statGroupTopRight.Children.Add(itemPoolStatGroup);
 
                 Log("Starting layout step.");
 
-                statGrouping.DoLayout(new Vector2(10, 20));
+                statGroupTopLeft.DoLayout(new Vector2(HORIZONTAL_PADDING, VERTICAL_PADDING));
+                statGroupTopRight.DoLayout(new Vector2(1920 - HORIZONTAL_PADDING, VERTICAL_PADDING));
 
                 CenteredRect r = new(canvas, Color.white, new(40, 40), "ProgressRect");
                 new Container(r).DoLayout(new Vector2(960, 1060));
