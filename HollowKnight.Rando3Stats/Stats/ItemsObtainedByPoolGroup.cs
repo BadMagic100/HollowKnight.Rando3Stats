@@ -3,12 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Modding;
 using Rando = RandomizerMod.RandomizerMod;
 
 namespace HollowKnight.Rando3Stats.Stats
 {
     public class ItemsObtainedByPoolGroup : PercentageStatistic
     {
+        private static SimpleLogger log = new("RandoStats:ItemsObtainedByPoolGroup");
+
         public static ItemsObtainedByPoolGroup[] GetAllPoolGroups()
         {
             return new ItemsObtainedByPoolGroup[]
@@ -45,7 +48,20 @@ namespace HollowKnight.Rando3Stats.Stats
 
         public bool IsEnabled
         {
-            get => poolGroup.IsEnabled;
+            get
+            {
+                if(poolGroup.IsEnabled)
+                {
+                    int total = GetTotal();
+                    if (total == 0)
+                    {
+                        log.LogWarn($"Disabling pool group {poolGroup.Name} with no randomized items - assuming cursed logic");
+                        return false;
+                    }
+                    return true;
+                }
+                return false;
+            }
         }
 
         public ItemsObtainedByPoolGroup(LogicalPoolGrouping pools) : base(pools.Name)

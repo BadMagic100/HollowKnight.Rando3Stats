@@ -10,7 +10,7 @@ namespace HollowKnight.Rando3Stats
         public static LogicalPoolGrouping Dreamers => new("Dreamers", Pool.Dreamers);
         public static LogicalPoolGrouping SkillLocations => new("Skills", Pool.Skills, Pool.SplitClaw, Pool.SplitCloakLocationOnly, Pool.FocusLocationOnly);
         public static LogicalPoolGrouping SkillItems => new("Skills", Pool.Skills, Pool.SplitClaw, Pool.SplitCloakItemOnly, 
-            Pool.FocusItemOnly, Pool.SwimItemOnly);
+            Pool.FocusItemOnly, Pool.SwimItemOnly, Pool.CursedNailItemOnly);
         public static LogicalPoolGrouping Charms => new("Charms", Pool.Charms);
         public static LogicalPoolGrouping Keys => new("Keys", Pool.Keys, Pool.ElevatorPass);
         public static LogicalPoolGrouping MaskShards => new("Mask Shards", Pool.MaskShards, Pool.CursedMasksItemOnly);

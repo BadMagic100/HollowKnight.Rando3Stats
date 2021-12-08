@@ -19,7 +19,7 @@ namespace HollowKnight.Rando3Stats.Stats
 
         public override int GetTotal()
         {
-            return RandoExtensions.GetRandomizedItemsWithDupes(true).Count();
+            return RandoExtensions.GetRandomizedItemsWithDupes().Count();
         }
     }
 }

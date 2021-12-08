@@ -9,7 +9,7 @@ namespace HollowKnight.Rando3Stats.Util
 {
     public static class RandoExtensions
     {
-        private static readonly SimpleLogger log = new SimpleLogger("RandoStats:Extensions");
+        private static readonly SimpleLogger log = new("RandoStats:Extensions");
 
         public static IEnumerable<string> GetAllItemsPlacedAt(this SaveSettings settings, string location)
         {
