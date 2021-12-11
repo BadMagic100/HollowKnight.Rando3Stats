@@ -30,6 +30,7 @@ namespace HollowKnight.Rando3Stats.UI
             this.verticalSpacing = verticalSpacing;
             this.maxColumns = maxColumns;
             this.horizontalAlign = horizontalAlign;
+            this.verticalAlign = verticalAlign;
         }
 
         public override Vector2 DoMeasure()
