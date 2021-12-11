@@ -8,7 +8,7 @@ using Rando = RandomizerMod.RandomizerMod;
 
 namespace HollowKnight.Rando3Stats.Stats
 {
-    public class ItemsObtainedByPoolGroup : PercentageStatistic
+    public class ItemsObtainedByPoolGroup : PercentageStatistic, IToggleableStatistic
     {
         private static SimpleLogger log = new("RandoStats:ItemsObtainedByPoolGroup");
 

@@ -3,6 +3,6 @@
     public interface IRandomizerStatistic
     {
         public string GetHeader();
-        public string GetDisplay();
+        public string GetContent();
     }
 }

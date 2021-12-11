@@ -16,9 +16,11 @@ namespace HollowKnight.Rando3Stats.UI
         private readonly float verticalSpacing;
         private readonly int maxColumns;
         private readonly HorizontalAlignment horizontalAlign;
+        private readonly VerticalAlignment verticalAlign;
 
         public DynamicGridLayout(float horizontalSpacing, float verticalSpacing, int maxColumns, 
-            HorizontalAlignment horizontalAlign = HorizontalAlignment.Left) : base()
+            HorizontalAlignment horizontalAlign = HorizontalAlignment.Left,
+            VerticalAlignment verticalAlign = VerticalAlignment.Top) : base()
         {
             if (maxColumns < 1)
             {
@@ -66,7 +68,13 @@ namespace HollowKnight.Rando3Stats.UI
 
             for (int row = 0; row < numRows; row++)
             {
-                float startY = availableSpace.yMin + row * (panelHeight + verticalSpacing);
+                float startY = row * (panelHeight + verticalSpacing) + verticalAlign switch 
+                {
+                    VerticalAlignment.Top => availableSpace.yMin,
+                    VerticalAlignment.Center => availableSpace.yMin + availableSpace.height / 2 - CachedDesiredSize.y / 2,
+                    VerticalAlignment.Bottom => availableSpace.yMax - CachedDesiredSize.y,
+                    _ => throw new NotImplementedException("Can't handle the current vertical alignment")
+                };
                 int childrenAvailable = Children.Count - row * numCols;
                 int childrenThisRow = childrenAvailable >= maxColumns ? maxColumns : childrenAvailable;
                 float widthOfRow = childrenThisRow * panelWidth + (childrenThisRow - 1) * horizontalSpacing;
@@ -77,7 +85,7 @@ namespace HollowKnight.Rando3Stats.UI
                         HorizontalAlignment.Left => availableSpace.xMin,
                         HorizontalAlignment.Center => availableSpace.xMin + availableSpace.width / 2 - widthOfRow / 2,
                         HorizontalAlignment.Right => availableSpace.xMax - widthOfRow,
-                        _ => throw new NotImplementedException("Can't handle the current Horizontal alignment")
+                        _ => throw new NotImplementedException("Can't handle the current horizontal alignment")
                     };
                     int childIndex = row * maxColumns + col;
                     Children[childIndex].DoArrange(new Rect(startX, startY, panelWidth, panelHeight));

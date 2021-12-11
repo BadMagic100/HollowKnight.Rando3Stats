@@ -4,7 +4,7 @@ using Rando = RandomizerMod.RandomizerMod;
 
 namespace HollowKnight.Rando3Stats.Stats
 {
-    public class LocationsCheckedByPoolGroup : PercentageStatistic
+    public class LocationsCheckedByPoolGroup : PercentageStatistic, IToggleableStatistic
     {
         public static LocationsCheckedByPoolGroup[] GetAllPoolGroups()
         {

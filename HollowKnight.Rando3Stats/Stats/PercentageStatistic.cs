@@ -17,7 +17,7 @@ namespace HollowKnight.Rando3Stats.Stats
         public abstract int GetObtained();
         public abstract int GetTotal();
 
-        public string GetDisplay()
+        public string GetContent()
         {
             // these computations may be expensive (in fact, they likely are). Just do them once.
             int obtained = GetObtained();

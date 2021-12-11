@@ -11,12 +11,15 @@ namespace HollowKnight.Rando3Stats.UI
     {
         private readonly float spacing;
         private readonly HorizontalAlignment horizontalAlign;
+        private readonly VerticalAlignment verticalAlign;
 
         public VerticalStackLayout(float spacing, 
-            HorizontalAlignment horizontalAlign = HorizontalAlignment.Left) : base()
+            HorizontalAlignment horizontalAlign = HorizontalAlignment.Left,
+            VerticalAlignment verticalAlign = VerticalAlignment.Top) : base()
         {
             this.spacing = spacing;
             this.horizontalAlign = horizontalAlign;
+            this.verticalAlign = verticalAlign;
         }
 
         public override Vector2 DoMeasure()
@@ -39,14 +42,20 @@ namespace HollowKnight.Rando3Stats.UI
 
         public override void DoArrange(Rect availableSpace)
         {
-            float startY = availableSpace.yMin;
+            float startY = verticalAlign switch
+            {
+                VerticalAlignment.Top => availableSpace.yMin,
+                VerticalAlignment.Center => availableSpace.yMin + availableSpace.height / 2 - CachedDesiredSize.y / 2,
+                VerticalAlignment.Bottom => availableSpace.yMax - CachedDesiredSize.y,
+                _ => throw new NotImplementedException("Can't handle the current vertical alignment")
+            };
 
             float xMin = horizontalAlign switch
             {
                 HorizontalAlignment.Left => availableSpace.xMin,
                 HorizontalAlignment.Center => availableSpace.xMin + availableSpace.width / 2 - CachedDesiredSize.x / 2,
                 HorizontalAlignment.Right => availableSpace.xMax - CachedDesiredSize.x,
-                _ => throw new NotImplementedException("Can't handle the current Horizontal alignment")
+                _ => throw new NotImplementedException("Can't handle the current horizontal alignment")
             };
             foreach (IArrangable child in Children)
             {
