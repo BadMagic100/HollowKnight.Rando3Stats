@@ -2,9 +2,11 @@
 using HollowKnight.Rando3Stats.UI;
 using Modding;
 using SereCore;
+using System.Linq;
 using System;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.UI;
 using Rando = RandomizerMod.RandomizerMod;
 
 namespace HollowKnight.Rando3Stats
@@ -39,7 +41,7 @@ namespace HollowKnight.Rando3Stats
 
         public override string GetVersion()
         {
-            string ver = "1.0.0";
+            string ver = "1.1.0";
             int minAPI = 45;
 
             bool apiTooLow = Convert.ToInt32(ModHooks.Instance.ModVersion.Split('-')[1]) < minAPI;
@@ -163,8 +165,22 @@ namespace HollowKnight.Rando3Stats
 
                 CenteredRect r = new(canvas, Color.white, new(40, 40), "ProgressRect");
                 new Container(r).DoLayout(new Vector2(960, 1060));
+
+                CenteredText clipboard = new(canvas, "Press Ctrl+C to copy completion.", GuiManager.Instance.TrajanNormal, FONT_SIZE_H2, "Copy_Prompt");
+                new Container(clipboard).DoLayout(new Vector2(960, 955));
+
+                Log("Completion screen setup complete");
+            }
+            else
+            {
+                Log("Not randomizer, skipping stats");
             }
             orig(self);
+        }
+        
+        private bool AnyKeyExcept(params KeyCode[] keys)
+        {
+            return Input.anyKey && !keys.Any(Input.GetKey);
         }
 
         private void InputHandler_CutsceneInput(On.InputHandler.orig_CutsceneInput orig, InputHandler self)
@@ -179,13 +195,28 @@ namespace HollowKnight.Rando3Stats
             {
                 if (holdToSkipLock) return;
 
-                bool held = Input.anyKey || self.gameController.AnyButton.IsPressed;
+                bool held = AnyKeyExcept(KeyCode.LeftControl, KeyCode.RightControl)
+                    || self.gameController.AnyButton.IsPressed;
                 RectTransform? tx = GameObject.Find("ProgressRect")?.GetComponent<RectTransform>();
                 // if we can't find this, something has gone really badly in the setup, revert to default behavior so we're not softlocked here
                 if (tx == null)
                 {
                     orig(self);
                     return;
+                }
+
+                // if ctrl is held, trigger on the frame where c pressed
+                if ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) && Input.GetKeyDown(KeyCode.C))
+                {
+                    Log("Copying!");
+                    PlayTime time = new() { RawTime = PlayerData.instance.playTime };
+                    string completionStr = new TotalItemsObtained("Total").GetContent();
+                    string timeStr = time.HasHours ? $"{(int)time.Hours:0}:{(int)time.Minutes:00}" 
+                        : time.HasMinutes ? $"{(int)time.Minutes:0}:{(int)time.Seconds:00}"
+                        : $"{(int)time.Seconds:0}s";
+                    GUIUtility.systemCopyBuffer = $"{timeStr} {completionStr}";
+                    // todo: need to make this actually reference the CenteredText so we can InvalidateMeasure
+                    GameObject.Find("Copy_Prompt").GetComponent<Text>().text = "Copied";
                 }
 
                 if (held)

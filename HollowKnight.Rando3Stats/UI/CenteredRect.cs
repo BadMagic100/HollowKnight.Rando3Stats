@@ -4,11 +4,9 @@ using UnityEngine.UI;
 
 namespace HollowKnight.Rando3Stats.UI
 {
-    public class CenteredRect : IArrangable
+    public class CenteredRect : ArrangableElement
     {
         private readonly GameObject imgObj;
-
-        public Vector2 CachedDesiredSize { get; private set; }
 
         public CenteredRect(GameObject canvas, Color color, Vector2 size, string name = "Rect")
         {
@@ -23,26 +21,21 @@ namespace HollowKnight.Rando3Stats.UI
 
             imgObj.AddComponent<Image>().color = color;
 
-            CanvasGroup group = imgObj.AddComponent<CanvasGroup>();
-            group.interactable = false;
-            group.blocksRaycasts = false;
-
             imgObj.transform.SetParent(canvas.transform, false);
         }
 
-        public Vector2 DoMeasure()
+        protected override Vector2 MeasureOverride()
         {
-            CachedDesiredSize = imgObj.GetComponent<RectTransform>().rect.size;
-            return CachedDesiredSize;
+            return imgObj.GetComponent<RectTransform>().rect.size;
         }
 
-        public void DoArrange(Rect availableSpace)
+        protected override void ArrangeOverride(Rect availableSpace)
         {
             RectTransform tx = imgObj.GetComponent<RectTransform>();
 
             // place the center of the transform at the center of the area
             (float cx, float cy) = availableSpace.center;
-            Vector2 pos = GuiManager.MakeAnchorPosition(new Vector2(cx - CachedDesiredSize.x / 2, cy - CachedDesiredSize.y / 2), CachedDesiredSize);
+            Vector2 pos = GuiManager.MakeAnchorPosition(new Vector2(cx - DesiredSize.x / 2, cy - DesiredSize.y / 2), DesiredSize);
             tx.anchorMax = pos;
             tx.anchorMin = pos;
         }

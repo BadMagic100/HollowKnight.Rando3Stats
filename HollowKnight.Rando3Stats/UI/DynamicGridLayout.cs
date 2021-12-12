@@ -33,13 +33,13 @@ namespace HollowKnight.Rando3Stats.UI
             this.verticalAlign = verticalAlign;
         }
 
-        public override Vector2 DoMeasure()
+        protected override Vector2 MeasureOverride()
         {
             if (Children.Count == 0) return Vector2.zero;
 
             float panelWidth = 0;
             float panelHeight = 0;
-            foreach (IArrangable child in Children)
+            foreach (ArrangableElement child in Children)
             {
                 (float childWidth, float childHeight) = child.DoMeasure();
                 if (childWidth > panelWidth)
@@ -54,26 +54,25 @@ namespace HollowKnight.Rando3Stats.UI
             int numRows = (Children.Count - 1) / maxColumns + 1;
             int numCols = Children.Count >= maxColumns ? maxColumns : Children.Count;
 
-            CachedDesiredSize = new Vector2(numCols * panelWidth + (numCols - 1) * horizontalSpacing,
+            return new Vector2(numCols * panelWidth + (numCols - 1) * horizontalSpacing,
                 numRows * panelHeight + (numRows - 1) * verticalSpacing);
-            return CachedDesiredSize;
         }
 
-        public override void DoArrange(Rect availableSpace)
+        protected override void ArrangeOverride(Rect availableSpace)
         {
             int numRows = (Children.Count - 1) / maxColumns + 1;
             int numCols = Children.Count >= maxColumns ? maxColumns : Children.Count;
 
-            float panelWidth = (CachedDesiredSize.x - (numCols - 1) * horizontalSpacing) / numCols;
-            float panelHeight = (CachedDesiredSize.y - (numRows - 1) * verticalSpacing) / numRows;
+            float panelWidth = (DesiredSize.x - (numCols - 1) * horizontalSpacing) / numCols;
+            float panelHeight = (DesiredSize.y - (numRows - 1) * verticalSpacing) / numRows;
 
             for (int row = 0; row < numRows; row++)
             {
                 float startY = row * (panelHeight + verticalSpacing) + verticalAlign switch 
                 {
                     VerticalAlignment.Top => availableSpace.yMin,
-                    VerticalAlignment.Center => availableSpace.yMin + availableSpace.height / 2 - CachedDesiredSize.y / 2,
-                    VerticalAlignment.Bottom => availableSpace.yMax - CachedDesiredSize.y,
+                    VerticalAlignment.Center => availableSpace.yMin + availableSpace.height / 2 - DesiredSize.y / 2,
+                    VerticalAlignment.Bottom => availableSpace.yMax - DesiredSize.y,
                     _ => throw new NotImplementedException("Can't handle the current vertical alignment")
                 };
                 int childrenAvailable = Children.Count - row * numCols;

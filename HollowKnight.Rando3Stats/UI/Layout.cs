@@ -6,20 +6,9 @@ namespace HollowKnight.Rando3Stats.UI
     /// <summary>
     /// An abstract layout for arranging several child elements.
     /// </summary>
-    public abstract class Layout : IArrangable
+    public abstract class Layout : ArrangableElement
     {
-        public List<IArrangable> Children { get; private set; }
-
-        public Vector2 CachedDesiredSize { get; protected set; }
-
-        public abstract Vector2 DoMeasure();
-
-        public abstract void DoArrange(Rect availableSpace);
-
-        public Layout()
-        {
-            Children = new List<IArrangable>();
-        }
+        public List<ArrangableElement> Children { get; } = new List<ArrangableElement>();
 
         /// <summary>
         /// Starts measuring and arranging the layout tree with this as the parent.

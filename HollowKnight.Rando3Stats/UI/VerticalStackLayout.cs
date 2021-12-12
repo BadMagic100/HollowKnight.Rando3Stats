@@ -22,12 +22,12 @@ namespace HollowKnight.Rando3Stats.UI
             this.verticalAlign = verticalAlign;
         }
 
-        public override Vector2 DoMeasure()
+        protected override Vector2 MeasureOverride()
         {
             if (Children.Count == 0) return Vector2.zero;
             float width = 0;
             float height = (Children.Count - 1) * spacing;
-            foreach (IArrangable child in Children)
+            foreach (ArrangableElement child in Children)
             {
                 (float childWidth, float childHeight) = child.DoMeasure();
                 height += childHeight;
@@ -36,31 +36,30 @@ namespace HollowKnight.Rando3Stats.UI
                     width = childWidth;
                 }
             }
-            CachedDesiredSize = new Vector2(width, height);
-            return CachedDesiredSize;
+            return new Vector2(width, height);
         }
 
-        public override void DoArrange(Rect availableSpace)
+        protected override void ArrangeOverride(Rect availableSpace)
         {
             float startY = verticalAlign switch
             {
                 VerticalAlignment.Top => availableSpace.yMin,
-                VerticalAlignment.Center => availableSpace.yMin + availableSpace.height / 2 - CachedDesiredSize.y / 2,
-                VerticalAlignment.Bottom => availableSpace.yMax - CachedDesiredSize.y,
+                VerticalAlignment.Center => availableSpace.yMin + availableSpace.height / 2 - DesiredSize.y / 2,
+                VerticalAlignment.Bottom => availableSpace.yMax - DesiredSize.y,
                 _ => throw new NotImplementedException("Can't handle the current vertical alignment")
             };
 
             float xMin = horizontalAlign switch
             {
                 HorizontalAlignment.Left => availableSpace.xMin,
-                HorizontalAlignment.Center => availableSpace.xMin + availableSpace.width / 2 - CachedDesiredSize.x / 2,
-                HorizontalAlignment.Right => availableSpace.xMax - CachedDesiredSize.x,
+                HorizontalAlignment.Center => availableSpace.xMin + availableSpace.width / 2 - DesiredSize.x / 2,
+                HorizontalAlignment.Right => availableSpace.xMax - DesiredSize.x,
                 _ => throw new NotImplementedException("Can't handle the current horizontal alignment")
             };
-            foreach (IArrangable child in Children)
+            foreach (ArrangableElement child in Children)
             {
-                float childHeight = child.CachedDesiredSize.y;
-                child.DoArrange(new Rect(xMin, startY, CachedDesiredSize.x, childHeight));
+                float childHeight = child.DesiredSize.y;
+                child.DoArrange(new Rect(xMin, startY, DesiredSize.x, childHeight));
                 startY += childHeight + spacing;
             }
         }

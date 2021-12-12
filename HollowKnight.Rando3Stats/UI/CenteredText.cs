@@ -1,15 +1,14 @@
 ﻿using HollowKnight.Rando3Stats.Util;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace HollowKnight.Rando3Stats.UI
 {
-    public class CenteredText : IArrangable
+    public class CenteredText : ArrangableElement
     {
         private readonly GameObject textObj;
         private readonly string textStr;
-
-        public Vector2 CachedDesiredSize { get; private set; }
 
         public CenteredText(GameObject canvas, string text, Font font, int fontSize, string name = "Text")
         {
@@ -26,10 +25,6 @@ namespace HollowKnight.Rando3Stats.UI
             tx.anchorMin = pos;
             tx.anchorMax = pos;
 
-            CanvasGroup grp = textObj.AddComponent<CanvasGroup>();
-            grp.interactable = false;
-            grp.blocksRaycasts = false;
-
             Text textComponent = textObj.AddComponent<Text>();
             textComponent.font = font;
             textComponent.text = text;
@@ -41,7 +36,7 @@ namespace HollowKnight.Rando3Stats.UI
             // it destroy itself on the outbound transistion
         }
 
-        public Vector2 DoMeasure()
+        protected override Vector2 MeasureOverride()
         {
             Text textComponent = textObj.GetComponent<Text>();
             TextGenerator textGen = new();
@@ -49,17 +44,16 @@ namespace HollowKnight.Rando3Stats.UI
             float width = textGen.GetPreferredWidth(textStr, settings);
             float height = textGen.GetPreferredHeight(textStr, settings);
 
-            CachedDesiredSize = new Vector2(width, height);
-            return CachedDesiredSize;
+            return new Vector2(width, height);
         }
 
-        public void DoArrange(Rect availableSpace)
+        protected override void ArrangeOverride(Rect availableSpace)
         {
             RectTransform tx = textObj.GetComponent<RectTransform>();
 
             // place the center of the text transform at the center of the area
             (float cx, float cy) = availableSpace.center;
-            Vector2 pos = GuiManager.MakeAnchorPosition(new Vector2(cx - CachedDesiredSize.x / 2, cy - CachedDesiredSize.y / 2),
+            Vector2 pos = GuiManager.MakeAnchorPosition(new Vector2(cx - DesiredSize.x / 2, cy - DesiredSize.y / 2),
                 GuiManager.ReferenceSize);
             tx.anchorMax = pos;
             tx.anchorMin = pos;

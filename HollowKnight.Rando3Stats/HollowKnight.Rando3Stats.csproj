@@ -31,6 +31,7 @@
 		<HintPath>$(HollowKnightRefs)/PlayMaker.dll</HintPath>
 		<Private>false</Private>
 	</Reference>
+	<Reference Include="PresentationCore" />
 	<Reference Include="RandomizerMod3.0">
 		<HintPath>$(HollowKnightRefs)\Mods\RandomizerMod3.0.dll</HintPath>
 		<Private>false</Private>
@@ -49,6 +50,10 @@
 	</Reference>
 	<Reference Include="UnityEngine.CoreModule">
 		<HintPath>$(HollowKnightRefs)\UnityEngine.CoreModule.dll</HintPath>
+		<Private>False</Private>
+	</Reference>
+	<Reference Include="UnityEngine.IMGUIModule">
+		<HintPath>$(HollowKnightRefs)\UnityEngine.IMGUIModule.dll</HintPath>
 		<Private>False</Private>
 	</Reference>
 	<Reference Include="UnityEngine.ImageConversionModule">
@@ -78,6 +83,6 @@
 	  </None>
 	</ItemGroup>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-	  <Exec Command="copy /v /y &quot;$(OutDir)RandoStats.dll&quot; &quot;$(HollowKnightRefs)\Mods&quot;" />
+	  <Exec Command="copy /v /y &quot;$(OutDir)RandoStats.*&quot; &quot;$(HollowKnightRefs)\Mods&quot;" />
 	</Target>
 </Project>

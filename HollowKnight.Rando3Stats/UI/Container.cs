@@ -11,18 +11,17 @@ namespace HollowKnight.Rando3Stats.UI
     /// </summary>
     public class Container : Layout
     {
-        public Container(IArrangable child) : base()
+        public Container(ArrangableElement child) : base()
         {
             Children.Add(child);
         }
 
-        public override Vector2 DoMeasure()
+        protected override Vector2 MeasureOverride()
         {
-            CachedDesiredSize = Children[0].DoMeasure();
-            return CachedDesiredSize;
+            return Children[0].DoMeasure();
         }
 
-        public override void DoArrange(Rect availableSpace)
+        protected override void ArrangeOverride(Rect availableSpace)
         {
             Children[0].DoArrange(availableSpace);
         }

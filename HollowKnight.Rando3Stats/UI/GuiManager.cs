@@ -35,8 +35,8 @@ namespace HollowKnight.Rando3Stats.UI
             scale.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             rootCanvas.AddComponent<GraphicRaycaster>();
             CanvasGroup group = rootCanvas.AddComponent<CanvasGroup>();
-            group.interactable = false;
-            group.blocksRaycasts = false;
+            group.interactable = true;
+            group.blocksRaycasts = true;
             return rootCanvas;
         }
 
