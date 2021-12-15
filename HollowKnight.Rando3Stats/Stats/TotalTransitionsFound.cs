@@ -18,12 +18,12 @@ namespace HollowKnight.Rando3Stats.Stats
             get => Rando.Instance.Settings.RandomizeAreas || Rando.Instance.Settings.RandomizeRooms;
         }
 
-        public override int GetObtained()
+        protected override int GetObtained()
         {
             return Rando.Instance.Settings.GetTransitionsFound().Length;
         }
 
-        public override int GetTotal()
+        protected override int GetTotal()
         {
             // this only returns randomized transitions
             return LogicManager.TransitionNames().Length;

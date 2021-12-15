@@ -9,13 +9,17 @@ namespace HollowKnight.Rando3Stats.Stats
     {
         public string Label { get; private set; }
 
-        public PercentageStatistic(string label)
+        private bool shouldRegister;
+        protected virtual string StatNamespace { get => GetType().Name; }
+
+        public PercentageStatistic(string label, bool register = false)
         {
             Label = label;
+            shouldRegister = register;
         }
 
-        public abstract int GetObtained();
-        public abstract int GetTotal();
+        protected abstract int GetObtained();
+        protected abstract int GetTotal();
 
         public string GetContent()
         {
@@ -26,7 +30,15 @@ namespace HollowKnight.Rando3Stats.Stats
             // ref: https://github.com/homothetyhk/HollowKnight.RandomizerMod/blob/e9ef1ee1c903d3da5d74a6c389b167caf29ba6c1/RandomizerMod3.0/RandomizerMod.cs#L375
             double rawPercent = (double)obtained / total * 100;
             int percent = (int)Math.Floor(rawPercent);
-            return $"{percent}% ({obtained}/{total})";
+            string content = $"{percent}% ({obtained}/{total})";
+            if (shouldRegister)
+            {
+                StatFormatRegistry.SetStat($"{StatNamespace}:Full", content);
+                StatFormatRegistry.SetStat($"{StatNamespace}:Percent", $"{percent}%");
+                StatFormatRegistry.SetStat($"{StatNamespace}:Obtained", obtained.ToString());
+                StatFormatRegistry.SetStat($"{StatNamespace}:Total", total.ToString());
+            }
+            return content;
         }
 
         public string GetHeader()

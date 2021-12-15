@@ -7,14 +7,48 @@ namespace HollowKnight.Rando3Stats.UI
     public class CenteredRect : ArrangableElement
     {
         private readonly GameObject imgObj;
+        private readonly RectTransform tx;
+        private float width, height;
 
-        public CenteredRect(GameObject canvas, Color color, Vector2 size, string name = "Rect") : base(canvas, name)
+        public float Width
         {
+            get => width;
+            set
+            {
+                if (value != width)
+                {
+                    width = value;
+                    tx.SetScaleX(value / tx.sizeDelta.x);
+                    InvalidateMeasure();
+                }
+            }
+        }
+
+        public float Height
+        {
+            get => height;
+            set
+            {
+                if (value != height)
+                {
+                    height = value;
+                    tx.SetScaleY(value / tx.sizeDelta.y);
+                    InvalidateMeasure();
+                }
+            }
+        }
+
+        public CenteredRect(GameObject canvas, Color color, float width, float height, string name = "Rect") : base(canvas, name)
+        {
+            this.width = width;
+            this.height = height;
+
             imgObj = new GameObject(name);
             imgObj.AddComponent<CanvasRenderer>();
 
+            Vector2 size = new(width, height);
             Vector2 pos = GuiManager.MakeAnchorPosition(new(0, 0), size);
-            RectTransform tx = imgObj.AddComponent<RectTransform>();
+            tx = imgObj.AddComponent<RectTransform>();
             tx.sizeDelta = size;
             tx.anchorMin = pos;
             tx.anchorMax = pos;
@@ -22,6 +56,8 @@ namespace HollowKnight.Rando3Stats.UI
             imgObj.AddComponent<Image>().color = color;
 
             imgObj.transform.SetParent(canvas.transform, false);
+            // hide until the first arrange cycle
+            imgObj.SetActive(false);
         }
 
         protected override Vector2 MeasureOverride()
@@ -38,6 +74,8 @@ namespace HollowKnight.Rando3Stats.UI
             Vector2 pos = GuiManager.MakeAnchorPosition(new Vector2(cx - DesiredSize.x / 2, cy - DesiredSize.y / 2), DesiredSize);
             tx.anchorMax = pos;
             tx.anchorMin = pos;
+
+            imgObj.SetActive(true);
         }
     }
 }

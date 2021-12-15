@@ -11,5 +11,11 @@ namespace HollowKnight.Rando3Stats
             get => GetBool(true);
             set => SetBool(value);
         }
+
+        public string CompletionFormatString
+        {
+            get => GetString("$RACING_EXTENDED$");
+            set => SetString(value);
+        }
     }
 }

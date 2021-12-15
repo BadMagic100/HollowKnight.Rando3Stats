@@ -8,9 +8,7 @@ namespace HollowKnight.Rando3Stats.Stats
 {
     public class TotalLocationsChecked : PercentageStatistic
     {
-        public TotalLocationsChecked(string label) : base(label)
-        {
-        }
+        public TotalLocationsChecked(string label) : base(label, true) { }
 
         private int AdjustCountForShops(int initialCount, HashSet<string> randomizedLocations, bool countAll)
         {
@@ -34,7 +32,7 @@ namespace HollowKnight.Rando3Stats.Stats
             return count;
         }
 
-        public override int GetObtained()
+        protected override int GetObtained()
         {
             HashSet<string> locations = ItemManager.GetRandomizedLocations();
             int totalCounter = locations
@@ -47,7 +45,7 @@ namespace HollowKnight.Rando3Stats.Stats
             return totalCounter;
         }
 
-        public override int GetTotal()
+        protected override int GetTotal()
         {
             HashSet<string> locations = ItemManager.GetRandomizedLocations();
             int totalCounter = locations.Count;

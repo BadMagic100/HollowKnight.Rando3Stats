@@ -39,14 +39,14 @@ namespace HollowKnight.Rando3Stats.Stats
             this.areaName = areaName;
         }
 
-        public override int GetObtained()
+        protected override int GetObtained()
         {
             return Rando.Instance.Settings.GetTransitionsFound()
                 .Where(x => LogicalAreaGrouping.GetLogicalAreaOf(x) == areaName)
                 .Count();
         }
 
-        public override int GetTotal()
+        protected override int GetTotal()
         {
             return LogicManager.TransitionNames()
                 .Where(x => LogicalAreaGrouping.GetLogicalAreaOf(x) == areaName)

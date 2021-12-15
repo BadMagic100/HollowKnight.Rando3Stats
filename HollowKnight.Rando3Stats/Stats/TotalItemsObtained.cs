@@ -10,14 +10,14 @@ namespace HollowKnight.Rando3Stats.Stats
 {
     public class TotalItemsObtained : PercentageStatistic
     {
-        public TotalItemsObtained(string label) : base(label) { }
+        public TotalItemsObtained(string label) : base(label, true) { }
 
-        public override int GetObtained()
+        protected override int GetObtained()
         {
             return RandoExtensions.GetRandomizedItemsWithDupes().Count(Rando.Instance.Settings.CheckItemFound);
         }
 
-        public override int GetTotal()
+        protected override int GetTotal()
         {
             return RandoExtensions.GetRandomizedItemsWithDupes().Count();
         }

@@ -74,14 +74,14 @@ namespace HollowKnight.Rando3Stats.Stats
             poolGroup = pools;
         }
 
-        public override int GetObtained()
+        protected override int GetObtained()
         {
             return RandoExtensions.GetRandomizedItemsWithDupes()
                 .Where(x => poolGroup.Pools.Select(y => y.Name).Contains(ExtraPools.GetPoolOf(x)))
                 .Count(Rando.Instance.Settings.CheckItemFound);
         }
 
-        public override int GetTotal()
+        protected override int GetTotal()
         {
             return RandoExtensions.GetRandomizedItemsWithDupes()
                 .Where(x => poolGroup.Pools.Select(y => y.Name).Contains(ExtraPools.GetPoolOf(x)))

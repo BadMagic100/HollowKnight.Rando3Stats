@@ -54,7 +54,7 @@ namespace HollowKnight.Rando3Stats.Stats
             poolGroup = pools;
         }
 
-        public override int GetObtained()
+        protected override int GetObtained()
         {
             return ItemManager.GetRandomizedLocations()
                 .Where(x => !LogicManager.ShopNames.Contains(x))
@@ -62,7 +62,7 @@ namespace HollowKnight.Rando3Stats.Stats
                 .Count(Rando.Instance.Settings.CheckLocationFound);
         }
 
-        public override int GetTotal()
+        protected override int GetTotal()
         {
             return ItemManager.GetRandomizedLocations()
                 .Where(x => !LogicManager.ShopNames.Contains(x))

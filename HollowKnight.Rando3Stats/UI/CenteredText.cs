@@ -46,6 +46,8 @@ namespace HollowKnight.Rando3Stats.UI
             textComponent.alignment = TextAnchor.UpperLeft;
 
             textObj.transform.SetParent(canvas.transform, false);
+            // hide until the first arrange
+            textObj.SetActive(false);
             // learning: no need for crazy state management (DontDestroyOnLoad) -- just create the text when you load into the scene and let
             // it destroy itself on the outbound transistion
         }
@@ -74,6 +76,8 @@ namespace HollowKnight.Rando3Stats.UI
                 GuiManager.ReferenceSize);
             tx.anchorMax = pos;
             tx.anchorMin = pos;
+
+            textObj.SetActive(true);
         }
     }
 }

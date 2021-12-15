@@ -10,7 +10,7 @@ namespace HollowKnight.Rando3Stats.Stats
 
         public GeoShopChecksSeen(string label) : base(label) { }
 
-        public override int GetObtained()
+        protected override int GetObtained()
         {
             return LogicManager.ShopNames
                 .Where(ItemManager.GetRandomizedLocations().Contains)
@@ -29,7 +29,7 @@ namespace HollowKnight.Rando3Stats.Stats
                 });
         }
 
-        public override int GetTotal()
+        protected override int GetTotal()
         {
             return LogicManager.ShopNames
                 .Where(ItemManager.GetRandomizedLocations().Contains)

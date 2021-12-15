@@ -31,7 +31,9 @@ namespace HollowKnight.Rando3Stats
         private float pressStartTime = 0;
         private bool holdToSkipLock = false;
 
+        private CenteredRect? progressRect;
         private CenteredText? clipboardPrompt;
+        private Layout? refLayout;
 
         public override ModSettings GlobalSettings
         {
@@ -111,6 +113,7 @@ namespace HollowKnight.Rando3Stats
                 IToggleableStatistic totalTransitionStat = new TotalTransitionsFound("Total");
 
                 Layout locationPoolStatGroup = new DynamicGridLayout(canvas, HORIZONTAL_SPACING, VERTICAL_SPACING, 2, HorizontalAlignment.Center);
+                refLayout = locationPoolStatGroup;
                 foreach (IToggleableStatistic poolStat in LocationsCheckedByPoolGroup.GetAllPoolGroups())
                 {
                     if (poolStat.IsEnabled)
@@ -165,10 +168,11 @@ namespace HollowKnight.Rando3Stats
                 statGroupTopRight.PositionAt(new Vector2(1920 - HORIZONTAL_PADDING, VERTICAL_PADDING));
                 statGroupBottomRight.PositionAt(new Vector2(1920 - HORIZONTAL_PADDING, 1080 - VERTICAL_PADDING));
 
-                CenteredRect progressRect = new(canvas, Color.white, new(40, 40), "ProgressRect");
+                progressRect = new CenteredRect(canvas, Color.white, 40, 40, "ProgressRect");
                 progressRect.PositionAt(new Vector2(960, 1060));
 
-                clipboardPrompt = new(canvas, "Press Ctrl+C to copy completion", GuiManager.Instance.TrajanNormal, FONT_SIZE_H2, "CopyPrompt");
+                clipboardPrompt = new CenteredText(canvas, "Press Ctrl+C to copy completion", GuiManager.Instance.TrajanNormal, FONT_SIZE_H2, "CopyPrompt");
+                // team cherry why (everything is off-center by a different amount, this is roughly centered on the "hold any button" text
                 clipboardPrompt.PositionAt(new Vector2(980, 955));
 
                 Log("Completion screen setup complete");
@@ -196,30 +200,39 @@ namespace HollowKnight.Rando3Stats
             else
             {
                 if (holdToSkipLock) return;
-
-                bool held = AnyKeyExcept(KeyCode.LeftControl, KeyCode.RightControl, KeyCode.LeftAlt, KeyCode.RightAlt)
-                    || self.gameController.AnyButton.IsPressed;
-                RectTransform? tx = GameObject.Find("ProgressRect")?.GetComponent<RectTransform>();
-                // if we can't find this, something has gone really badly in the setup, revert to default behavior so we're not softlocked here
-                if (tx == null)
+                // if these don't exist something has gone badly; just do the default input behaviour instead
+                if (progressRect == null || clipboardPrompt == null)
                 {
                     orig(self);
                     return;
                 }
 
+                bool held = AnyKeyExcept(KeyCode.LeftControl, KeyCode.RightControl, KeyCode.LeftAlt, KeyCode.RightAlt)
+                    || self.gameController.AnyButton.IsPressed;
+
                 // if ctrl is held, trigger on the frame where c pressed
                 if ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) && Input.GetKeyDown(KeyCode.C))
                 {
-                    Log("Copying!");
-                    PlayTime time = new() { RawTime = PlayerData.instance.playTime };
-                    string completionStr = new TotalItemsObtained("Total").GetContent();
-                    string timeStr = time.HasHours ? $"{(int)time.Hours:0}:{(int)time.Minutes:00}" 
-                        : time.HasMinutes ? $"{(int)time.Minutes:0}:{(int)time.Seconds:00}"
-                        : $"{(int)time.Seconds:0}s";
-                    GUIUtility.systemCopyBuffer = $"{timeStr} {completionStr}";
-                    if (clipboardPrompt != null)
+                    StatFormatRegistry.GenerateBasicStats();
+                    GUIUtility.systemCopyBuffer = StatFormatRegistry.Format(Settings.CompletionFormatString);
+                    clipboardPrompt.Text = "Copied!";
+                }
+                if (Input.GetKeyDown(KeyCode.H))
+                {
+                    if (refLayout?.Children.Last().Name != "HelloText")
                     {
-                        clipboardPrompt.Text = "Copied!";
+                        refLayout?.Children.Add(new CenteredText(GameObject.Find("StatsCanvas"), "Hello", GuiManager.Instance.TrajanNormal, FONT_SIZE_H2, "HelloText"));
+                    }
+                    else if (refLayout?.Children.Last() is CenteredText txt)
+                    {
+                        txt.Text += txt.Text.Last();
+                    }
+                }
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    if (refLayout?.Children.Last() is CenteredText txt)
+                    {
+                        txt.Text = "Bye";
                     }
                 }
 
@@ -240,14 +253,12 @@ namespace HollowKnight.Rando3Stats
                         GameObject.Find("StatsCanvas").AddComponent<CanvasGroupLinearFade>().duration = 0.5f;
                     }
                     float progressPercentage = (Time.time - pressStartTime) / LENGTH_OF_PRESS_TO_SKIP;
-                    float desiredWidth = GuiManager.ReferenceSize.x * progressPercentage;
-                    float scale = desiredWidth / tx.sizeDelta.x;
-                    tx.SetScaleX(scale);
+                    progressRect.Width = GuiManager.ReferenceSize.x * progressPercentage;
                 }
                 else
                 {
                     pressStartTime = 0;
-                    tx.SetScaleX(0);
+                    progressRect.Width = 0;
                 }
             }
         }

@@ -56,6 +56,7 @@ namespace HollowKnight.Rando3Stats.UI
         public void InvalidateMeasure()
         {
             MeasureIsValid = false;
+            LogicalParent?.InvalidateMeasure();
         }
 
         public void InvalidateArrange()
