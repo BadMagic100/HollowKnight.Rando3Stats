@@ -8,7 +8,7 @@ namespace HollowKnight.Rando3Stats.UI
     {
         private readonly GameObject imgObj;
 
-        public CenteredRect(GameObject canvas, Color color, Vector2 size, string name = "Rect")
+        public CenteredRect(GameObject canvas, Color color, Vector2 size, string name = "Rect") : base(canvas, name)
         {
             imgObj = new GameObject(name);
             imgObj.AddComponent<CanvasRenderer>();

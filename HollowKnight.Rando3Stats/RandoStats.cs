@@ -31,6 +31,8 @@ namespace HollowKnight.Rando3Stats
         private float pressStartTime = 0;
         private bool holdToSkipLock = false;
 
+        private CenteredText? clipboardPrompt;
+
         public override ModSettings GlobalSettings
         {
             get => Settings;
@@ -79,7 +81,7 @@ namespace HollowKnight.Rando3Stats
         {
             if (key == "PERMA_GAME_OVER_CONTINUE" && sheetTitle == "Credits List")
             {
-                return "Hold any button to continue.";
+                return "Hold any button to continue";
             }
             return Language.Language.GetInternal(key, sheetTitle);
         }
@@ -108,7 +110,7 @@ namespace HollowKnight.Rando3Stats
 
                 IToggleableStatistic totalTransitionStat = new TotalTransitionsFound("Total");
 
-                Layout locationPoolStatGroup = new DynamicGridLayout(HORIZONTAL_SPACING, VERTICAL_SPACING, 2, HorizontalAlignment.Center);
+                Layout locationPoolStatGroup = new DynamicGridLayout(canvas, HORIZONTAL_SPACING, VERTICAL_SPACING, 2, HorizontalAlignment.Center);
                 foreach (IToggleableStatistic poolStat in LocationsCheckedByPoolGroup.GetAllPoolGroups())
                 {
                     if (poolStat.IsEnabled)
@@ -119,7 +121,7 @@ namespace HollowKnight.Rando3Stats
                 IRandomizerStatistic geoShopLocationStat = new GeoShopChecksSeen("Geo Shops");
                 locationPoolStatGroup.Children.Add(GetStatText(canvas, geoShopLocationStat));
 
-                Layout itemPoolStatGroup = new DynamicGridLayout(HORIZONTAL_SPACING, VERTICAL_SPACING, 2, HorizontalAlignment.Center);
+                Layout itemPoolStatGroup = new DynamicGridLayout(canvas, HORIZONTAL_SPACING, VERTICAL_SPACING, 2, HorizontalAlignment.Center);
                 foreach (IToggleableStatistic poolStat in ItemsObtainedByPoolGroup.GetAllPoolGroups())
                 {
                     if (poolStat.IsEnabled)
@@ -128,17 +130,17 @@ namespace HollowKnight.Rando3Stats
                     }
                 }
 
-                Layout statGroupTopLeft = new VerticalStackLayout(VERTICAL_SPACING);
+                Layout statGroupTopLeft = new VerticalStackLayout(canvas, VERTICAL_SPACING);
                 statGroupTopLeft.Children.Add(new CenteredText(canvas, "Locations Found", GuiManager.Instance.TrajanBold, FONT_SIZE_H1));
                 statGroupTopLeft.Children.Add(totalLocationStatText);
                 statGroupTopLeft.Children.Add(locationPoolStatGroup);
 
-                Layout statGroupTopRight = new VerticalStackLayout(VERTICAL_SPACING, HorizontalAlignment.Right);
+                Layout statGroupTopRight = new VerticalStackLayout(canvas, VERTICAL_SPACING, HorizontalAlignment.Right);
                 statGroupTopRight.Children.Add(new CenteredText(canvas, "Items Obtained", GuiManager.Instance.TrajanBold, FONT_SIZE_H1));
                 statGroupTopRight.Children.Add(totalItemStatText);
                 statGroupTopRight.Children.Add(itemPoolStatGroup);
 
-                Layout statGroupBottomRight = new VerticalStackLayout(VERTICAL_SPACING, HorizontalAlignment.Right, VerticalAlignment.Bottom);
+                Layout statGroupBottomRight = new VerticalStackLayout(canvas, VERTICAL_SPACING, HorizontalAlignment.Right, VerticalAlignment.Bottom);
 
                 if (totalTransitionStat.IsEnabled)
                 {
@@ -146,7 +148,7 @@ namespace HollowKnight.Rando3Stats
                     statGroupBottomRight.Children.Add(new CenteredText(canvas, "Transitions Found", GuiManager.Instance.TrajanBold, FONT_SIZE_H1));
                     statGroupBottomRight.Children.Add(totalTransitionStatText);
 
-                    Layout transitionAreaStatGroup = new DynamicGridLayout(HORIZONTAL_SPACING, VERTICAL_SPACING, 2, HorizontalAlignment.Center);
+                    Layout transitionAreaStatGroup = new DynamicGridLayout(canvas, HORIZONTAL_SPACING, VERTICAL_SPACING, 2, HorizontalAlignment.Center);
                     foreach (IToggleableStatistic areaStat in TransitionsFoundByArea.GetAllAreas())
                     {
                         if (areaStat.IsEnabled)
@@ -159,15 +161,15 @@ namespace HollowKnight.Rando3Stats
 
                 Log("Starting layout step.");
 
-                statGroupTopLeft.DoLayout(new Vector2(HORIZONTAL_PADDING, VERTICAL_PADDING));
-                statGroupTopRight.DoLayout(new Vector2(1920 - HORIZONTAL_PADDING, VERTICAL_PADDING));
-                statGroupBottomRight.DoLayout(new Vector2(1920 - HORIZONTAL_PADDING, 1080 - VERTICAL_PADDING));
+                statGroupTopLeft.PositionAt(new Vector2(HORIZONTAL_PADDING, VERTICAL_PADDING));
+                statGroupTopRight.PositionAt(new Vector2(1920 - HORIZONTAL_PADDING, VERTICAL_PADDING));
+                statGroupBottomRight.PositionAt(new Vector2(1920 - HORIZONTAL_PADDING, 1080 - VERTICAL_PADDING));
 
-                CenteredRect r = new(canvas, Color.white, new(40, 40), "ProgressRect");
-                new Container(r).DoLayout(new Vector2(960, 1060));
+                CenteredRect progressRect = new(canvas, Color.white, new(40, 40), "ProgressRect");
+                progressRect.PositionAt(new Vector2(960, 1060));
 
-                CenteredText clipboard = new(canvas, "Press Ctrl+C to copy completion.", GuiManager.Instance.TrajanNormal, FONT_SIZE_H2, "Copy_Prompt");
-                new Container(clipboard).DoLayout(new Vector2(960, 955));
+                clipboardPrompt = new(canvas, "Press Ctrl+C to copy completion", GuiManager.Instance.TrajanNormal, FONT_SIZE_H2, "CopyPrompt");
+                clipboardPrompt.PositionAt(new Vector2(980, 955));
 
                 Log("Completion screen setup complete");
             }
@@ -195,7 +197,7 @@ namespace HollowKnight.Rando3Stats
             {
                 if (holdToSkipLock) return;
 
-                bool held = AnyKeyExcept(KeyCode.LeftControl, KeyCode.RightControl)
+                bool held = AnyKeyExcept(KeyCode.LeftControl, KeyCode.RightControl, KeyCode.LeftAlt, KeyCode.RightAlt)
                     || self.gameController.AnyButton.IsPressed;
                 RectTransform? tx = GameObject.Find("ProgressRect")?.GetComponent<RectTransform>();
                 // if we can't find this, something has gone really badly in the setup, revert to default behavior so we're not softlocked here
@@ -215,8 +217,10 @@ namespace HollowKnight.Rando3Stats
                         : time.HasMinutes ? $"{(int)time.Minutes:0}:{(int)time.Seconds:00}"
                         : $"{(int)time.Seconds:0}s";
                     GUIUtility.systemCopyBuffer = $"{timeStr} {completionStr}";
-                    // todo: need to make this actually reference the CenteredText so we can InvalidateMeasure
-                    GameObject.Find("Copy_Prompt").GetComponent<Text>().text = "Copied";
+                    if (clipboardPrompt != null)
+                    {
+                        clipboardPrompt.Text = "Copied!";
+                    }
                 }
 
                 if (held)
@@ -252,7 +256,7 @@ namespace HollowKnight.Rando3Stats
         {
             string header = stat.GetHeader();
             string text = stat.GetContent();
-            Layout statStack = new VerticalStackLayout(5f, HorizontalAlignment.Center);
+            Layout statStack = new VerticalStackLayout(canvas, 5f, HorizontalAlignment.Center);
             statStack.Children.Add(new CenteredText(canvas, header, GuiManager.Instance.TrajanBold, FONT_SIZE_H2, "Stat_" + header));
             statStack.Children.Add(new CenteredText(canvas, text, GuiManager.Instance.TrajanNormal, FONT_SIZE_H3, "StatValue_" + header));
             return statStack;

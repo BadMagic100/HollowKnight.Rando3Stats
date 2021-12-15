@@ -8,18 +8,11 @@ namespace HollowKnight.Rando3Stats.UI
     /// </summary>
     public abstract class Layout : ArrangableElement
     {
-        public List<ArrangableElement> Children { get; } = new List<ArrangableElement>();
+        public ParentedElementList Children { get; }
 
-        /// <summary>
-        /// Starts measuring and arranging the layout tree with this as the parent.
-        /// </summary>
-        /// <param name="anchor">The anchoring position for this layout</param>
-        public void DoLayout(Vector2 anchor)
+        public Layout(GameObject visualParent, string name) : base(visualParent, name)
         {
-            DoMeasure();
-            // Layouts can & will use more space than allowed; the size of the rect is only used for alignment purposes.
-            // At the parent level, we can set it as zero.
-            DoArrange(new Rect(anchor, Vector2.zero));
+            Children = new ParentedElementList(this);
         }
     }
 }

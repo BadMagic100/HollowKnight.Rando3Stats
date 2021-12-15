@@ -8,9 +8,23 @@ namespace HollowKnight.Rando3Stats.UI
     public class CenteredText : ArrangableElement
     {
         private readonly GameObject textObj;
-        private readonly string textStr;
+        private string textStr;
 
-        public CenteredText(GameObject canvas, string text, Font font, int fontSize, string name = "Text")
+        public string Text
+        {
+            get => textStr;
+            set
+            {
+                if (value != textStr)
+                {
+                    textStr = value;
+                    textObj.GetComponent<Text>().text = value;
+                    InvalidateMeasure();
+                }
+            }
+        }
+
+        public CenteredText(GameObject canvas, string text, Font font, int fontSize, string name = "Text") : base(canvas, name)
         {
             textStr = text;
 
@@ -41,6 +55,9 @@ namespace HollowKnight.Rando3Stats.UI
             Text textComponent = textObj.GetComponent<Text>();
             TextGenerator textGen = new();
             TextGenerationSettings settings = textComponent.GetGenerationSettings(textComponent.rectTransform.rect.size);
+            // by default, this will inherit the parent canvas's scale factor, which is set to scale with screen space.
+            // however, since we're functioning in an unscaled coordinate system we should get the unscaled size to measure correctly.
+            settings.scaleFactor = 1;
             float width = textGen.GetPreferredWidth(textStr, settings);
             float height = textGen.GetPreferredHeight(textStr, settings);
 

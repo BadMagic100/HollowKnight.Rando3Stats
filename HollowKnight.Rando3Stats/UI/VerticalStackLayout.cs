@@ -13,9 +13,10 @@ namespace HollowKnight.Rando3Stats.UI
         private readonly HorizontalAlignment horizontalAlign;
         private readonly VerticalAlignment verticalAlign;
 
-        public VerticalStackLayout(float spacing, 
+        public VerticalStackLayout(GameObject canvas, float spacing, 
             HorizontalAlignment horizontalAlign = HorizontalAlignment.Left,
-            VerticalAlignment verticalAlign = VerticalAlignment.Top) : base()
+            VerticalAlignment verticalAlign = VerticalAlignment.Top,
+            string name = nameof(VerticalStackLayout)) : base(canvas, name)
         {
             this.spacing = spacing;
             this.horizontalAlign = horizontalAlign;

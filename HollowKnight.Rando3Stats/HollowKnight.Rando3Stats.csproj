@@ -83,6 +83,6 @@
 	  </None>
 	</ItemGroup>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-	  <Exec Command="copy /v /y &quot;$(OutDir)RandoStats.*&quot; &quot;$(HollowKnightRefs)\Mods&quot;" />
+	  <Exec Command="copy /v /y &quot;$(OutDir)RandoStats.dll&quot; &quot;$(HollowKnightRefs)\Mods&quot;" />
 	</Target>
 </Project>

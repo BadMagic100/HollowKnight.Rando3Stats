@@ -18,9 +18,11 @@ namespace HollowKnight.Rando3Stats.UI
         private readonly HorizontalAlignment horizontalAlign;
         private readonly VerticalAlignment verticalAlign;
 
-        public DynamicGridLayout(float horizontalSpacing, float verticalSpacing, int maxColumns, 
+        public DynamicGridLayout(GameObject canvas,
+            float horizontalSpacing, float verticalSpacing, int maxColumns, 
             HorizontalAlignment horizontalAlign = HorizontalAlignment.Left,
-            VerticalAlignment verticalAlign = VerticalAlignment.Top) : base()
+            VerticalAlignment verticalAlign = VerticalAlignment.Top,
+            string name = nameof(DynamicGridLayout)) : base(canvas, name)
         {
             if (maxColumns < 1)
             {

@@ -37,6 +37,7 @@ namespace HollowKnight.Rando3Stats.UI
             CanvasGroup group = rootCanvas.AddComponent<CanvasGroup>();
             group.interactable = true;
             group.blocksRaycasts = true;
+            rootCanvas.AddComponent<LayoutOrchestrator>();
             return rootCanvas;
         }
 
