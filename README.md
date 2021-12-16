@@ -31,7 +31,7 @@ still be correct, but your Items Obtained stats will produce unexpected results.
 
 * Prevents mashing through the completion screen - replaces press to skip with a 1.5 second hold.
 * Allows players to use Ctrl+C to copy completion statistics to the clipboard with custom formatting
-  available via global settings.
+  available via [global settings](readme-assets/GlobalSettings.md).
 * Available Stats
   * **Randomized Locations Checked**    
     This stat is the number of randomized locations that you've checked and obtained. There is a
