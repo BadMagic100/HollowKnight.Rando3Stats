@@ -15,8 +15,6 @@ namespace HollowKnight.Rando3Stats.UI
         private readonly float horizontalSpacing;
         private readonly float verticalSpacing;
         private readonly int maxColumns;
-        private readonly HorizontalAlignment horizontalAlign;
-        private readonly VerticalAlignment verticalAlign;
 
         public DynamicGridLayout(GameObject canvas,
             float horizontalSpacing, float verticalSpacing, int maxColumns, 
@@ -31,8 +29,8 @@ namespace HollowKnight.Rando3Stats.UI
             this.horizontalSpacing = horizontalSpacing;
             this.verticalSpacing = verticalSpacing;
             this.maxColumns = maxColumns;
-            this.horizontalAlign = horizontalAlign;
-            this.verticalAlign = verticalAlign;
+            HorizontalAlignment = horizontalAlign;
+            VerticalAlignment = verticalAlign;
         }
 
         protected override Vector2 MeasureOverride()
@@ -68,21 +66,18 @@ namespace HollowKnight.Rando3Stats.UI
             float panelWidth = (DesiredSize.x - (numCols - 1) * horizontalSpacing) / numCols;
             float panelHeight = (DesiredSize.y - (numRows - 1) * verticalSpacing) / numRows;
 
+            (_, float top) = GetAlignedTopLeftCorner(availableSpace);
+
             for (int row = 0; row < numRows; row++)
             {
-                float startY = row * (panelHeight + verticalSpacing) + verticalAlign switch 
-                {
-                    VerticalAlignment.Top => availableSpace.yMin,
-                    VerticalAlignment.Center => availableSpace.yMin + availableSpace.height / 2 - DesiredSize.y / 2,
-                    VerticalAlignment.Bottom => availableSpace.yMax - DesiredSize.y,
-                    _ => throw new NotImplementedException("Can't handle the current vertical alignment")
-                };
+                float startY = row * (panelHeight + verticalSpacing) + top;
                 int childrenAvailable = Children.Count - row * numCols;
                 int childrenThisRow = childrenAvailable >= maxColumns ? maxColumns : childrenAvailable;
                 float widthOfRow = childrenThisRow * panelWidth + (childrenThisRow - 1) * horizontalSpacing;
                 for (int col = 0; col < childrenThisRow; col++)
                 {
-                    float startX = col * (panelWidth + horizontalSpacing) + horizontalAlign switch
+                    // we can't just use the default aligned left side as the last row may be smaller than the others.
+                    float startX = col * (panelWidth + horizontalSpacing) + HorizontalAlignment switch
                     {
                         HorizontalAlignment.Left => availableSpace.xMin,
                         HorizontalAlignment.Center => availableSpace.xMin + availableSpace.width / 2 - widthOfRow / 2,

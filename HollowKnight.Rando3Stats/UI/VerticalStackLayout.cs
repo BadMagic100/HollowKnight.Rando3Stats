@@ -10,8 +10,6 @@ namespace HollowKnight.Rando3Stats.UI
     public class VerticalStackLayout : Layout
     {
         private readonly float spacing;
-        private readonly HorizontalAlignment horizontalAlign;
-        private readonly VerticalAlignment verticalAlign;
 
         public VerticalStackLayout(GameObject canvas, float spacing, 
             HorizontalAlignment horizontalAlign = HorizontalAlignment.Left,
@@ -19,8 +17,8 @@ namespace HollowKnight.Rando3Stats.UI
             string name = nameof(VerticalStackLayout)) : base(canvas, name)
         {
             this.spacing = spacing;
-            this.horizontalAlign = horizontalAlign;
-            this.verticalAlign = verticalAlign;
+            HorizontalAlignment = horizontalAlign;
+            VerticalAlignment = verticalAlign;
         }
 
         protected override Vector2 MeasureOverride()
@@ -42,26 +40,14 @@ namespace HollowKnight.Rando3Stats.UI
 
         protected override void ArrangeOverride(Rect availableSpace)
         {
-            float startY = verticalAlign switch
-            {
-                VerticalAlignment.Top => availableSpace.yMin,
-                VerticalAlignment.Center => availableSpace.yMin + availableSpace.height / 2 - DesiredSize.y / 2,
-                VerticalAlignment.Bottom => availableSpace.yMax - DesiredSize.y,
-                _ => throw new NotImplementedException("Can't handle the current vertical alignment")
-            };
+            Vector2 topLeft = GetAlignedTopLeftCorner(availableSpace);
 
-            float xMin = horizontalAlign switch
-            {
-                HorizontalAlignment.Left => availableSpace.xMin,
-                HorizontalAlignment.Center => availableSpace.xMin + availableSpace.width / 2 - DesiredSize.x / 2,
-                HorizontalAlignment.Right => availableSpace.xMax - DesiredSize.x,
-                _ => throw new NotImplementedException("Can't handle the current horizontal alignment")
-            };
+            (float left, float top) = topLeft;
             foreach (ArrangableElement child in Children)
             {
                 float childHeight = child.DesiredSize.y;
-                child.DoArrange(new Rect(xMin, startY, DesiredSize.x, childHeight));
-                startY += childHeight + spacing;
+                child.DoArrange(new Rect(left, top, DesiredSize.x, childHeight));
+                top += childHeight + spacing;
             }
         }
     }

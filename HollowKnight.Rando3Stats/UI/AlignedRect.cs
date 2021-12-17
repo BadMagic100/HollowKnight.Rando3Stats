@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace HollowKnight.Rando3Stats.UI
 {
-    public class CenteredRect : ArrangableElement
+    public class AlignedRect : ArrangableElement
     {
         private readonly GameObject imgObj;
         private readonly RectTransform tx;
@@ -38,7 +38,7 @@ namespace HollowKnight.Rando3Stats.UI
             }
         }
 
-        public CenteredRect(GameObject canvas, Color color, float width, float height, string name = "Rect") : base(canvas, name)
+        public AlignedRect(GameObject canvas, Color color, float width, float height, string name = "Rect") : base(canvas, name)
         {
             this.width = width;
             this.height = height;
@@ -70,8 +70,7 @@ namespace HollowKnight.Rando3Stats.UI
             RectTransform tx = imgObj.GetComponent<RectTransform>();
 
             // place the center of the transform at the center of the area
-            (float cx, float cy) = availableSpace.center;
-            Vector2 pos = GuiManager.MakeAnchorPosition(new Vector2(cx - DesiredSize.x / 2, cy - DesiredSize.y / 2), DesiredSize);
+            Vector2 pos = GuiManager.MakeAnchorPosition(GetAlignedTopLeftCorner(availableSpace), DesiredSize);
             tx.anchorMax = pos;
             tx.anchorMin = pos;
 

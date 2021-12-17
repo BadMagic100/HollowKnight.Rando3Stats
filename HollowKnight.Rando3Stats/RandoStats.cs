@@ -31,8 +31,8 @@ namespace HollowKnight.Rando3Stats
         private float pressStartTime = 0;
         private bool holdToSkipLock = false;
 
-        private CenteredRect? progressRect;
-        private CenteredText? clipboardPrompt;
+        private AlignedRect? progressRect;
+        private AlignedText? clipboardPrompt;
         private Layout? refLayout;
 
         public override ModSettings GlobalSettings
@@ -134,12 +134,20 @@ namespace HollowKnight.Rando3Stats
                 }
 
                 Layout statGroupTopLeft = new VerticalStackLayout(canvas, VERTICAL_SPACING);
-                statGroupTopLeft.Children.Add(new CenteredText(canvas, "Locations Found", GuiManager.Instance.TrajanBold, FONT_SIZE_H1));
+                statGroupTopLeft.Children.Add(new AlignedText(canvas, "Locations Found", GuiManager.Instance.TrajanBold, FONT_SIZE_H1)
+                {
+                    VerticalAlignment = VerticalAlignment.Center,
+                    HorizontalAlignment = HorizontalAlignment.Center
+                });
                 statGroupTopLeft.Children.Add(totalLocationStatText);
                 statGroupTopLeft.Children.Add(locationPoolStatGroup);
 
                 Layout statGroupTopRight = new VerticalStackLayout(canvas, VERTICAL_SPACING, HorizontalAlignment.Right);
-                statGroupTopRight.Children.Add(new CenteredText(canvas, "Items Obtained", GuiManager.Instance.TrajanBold, FONT_SIZE_H1));
+                statGroupTopRight.Children.Add(new AlignedText(canvas, "Items Obtained", GuiManager.Instance.TrajanBold, FONT_SIZE_H1)
+                {
+                    VerticalAlignment = VerticalAlignment.Center,
+                    HorizontalAlignment = HorizontalAlignment.Center
+                });
                 statGroupTopRight.Children.Add(totalItemStatText);
                 statGroupTopRight.Children.Add(itemPoolStatGroup);
 
@@ -148,7 +156,11 @@ namespace HollowKnight.Rando3Stats
                 if (totalTransitionStat.IsEnabled)
                 {
                     Layout totalTransitionStatText = GetStatText(canvas, totalTransitionStat);
-                    statGroupBottomRight.Children.Add(new CenteredText(canvas, "Transitions Found", GuiManager.Instance.TrajanBold, FONT_SIZE_H1));
+                    statGroupBottomRight.Children.Add(new AlignedText(canvas, "Transitions Found", GuiManager.Instance.TrajanBold, FONT_SIZE_H1)
+                    {
+                        VerticalAlignment = VerticalAlignment.Center,
+                        HorizontalAlignment = HorizontalAlignment.Center
+                    });
                     statGroupBottomRight.Children.Add(totalTransitionStatText);
 
                     Layout transitionAreaStatGroup = new DynamicGridLayout(canvas, HORIZONTAL_SPACING, VERTICAL_SPACING, 2, HorizontalAlignment.Center);
@@ -168,10 +180,18 @@ namespace HollowKnight.Rando3Stats
                 statGroupTopRight.PositionAt(new Vector2(1920 - HORIZONTAL_PADDING, VERTICAL_PADDING));
                 statGroupBottomRight.PositionAt(new Vector2(1920 - HORIZONTAL_PADDING, 1080 - VERTICAL_PADDING));
 
-                progressRect = new CenteredRect(canvas, Color.white, 40, 40, "ProgressRect");
+                progressRect = new AlignedRect(canvas, Color.white, 40, 40, "ProgressRect")
+                {
+                    VerticalAlignment = VerticalAlignment.Center,
+                    HorizontalAlignment = HorizontalAlignment.Center
+                };
                 progressRect.PositionAt(new Vector2(960, 1060));
 
-                clipboardPrompt = new CenteredText(canvas, "Press Ctrl+C to copy completion", GuiManager.Instance.TrajanNormal, FONT_SIZE_H2, "CopyPrompt");
+                clipboardPrompt = new AlignedText(canvas, "Press Ctrl+C to copy completion", GuiManager.Instance.TrajanNormal, FONT_SIZE_H2, "CopyPrompt")
+                {
+                    VerticalAlignment = VerticalAlignment.Center,
+                    HorizontalAlignment = HorizontalAlignment.Center
+                };
                 // team cherry why (everything is off-center by a different amount, this is roughly centered on the "hold any button" text
                 clipboardPrompt.PositionAt(new Vector2(980, 955));
 
@@ -217,24 +237,6 @@ namespace HollowKnight.Rando3Stats
                     GUIUtility.systemCopyBuffer = StatFormatRegistry.Format(Settings.CompletionFormatString);
                     clipboardPrompt.Text = "Copied!";
                 }
-                if (Input.GetKeyDown(KeyCode.H))
-                {
-                    if (refLayout?.Children.Last().Name != "HelloText")
-                    {
-                        refLayout?.Children.Add(new CenteredText(GameObject.Find("StatsCanvas"), "Hello", GuiManager.Instance.TrajanNormal, FONT_SIZE_H2, "HelloText"));
-                    }
-                    else if (refLayout?.Children.Last() is CenteredText txt)
-                    {
-                        txt.Text += txt.Text.Last();
-                    }
-                }
-                if (Input.GetKeyDown(KeyCode.Escape))
-                {
-                    if (refLayout?.Children.Last() is CenteredText txt)
-                    {
-                        txt.Text = "Bye";
-                    }
-                }
 
                 if (held)
                 {
@@ -268,8 +270,16 @@ namespace HollowKnight.Rando3Stats
             string header = stat.GetHeader();
             string text = stat.GetContent();
             Layout statStack = new VerticalStackLayout(canvas, 5f, HorizontalAlignment.Center);
-            statStack.Children.Add(new CenteredText(canvas, header, GuiManager.Instance.TrajanBold, FONT_SIZE_H2, "Stat_" + header));
-            statStack.Children.Add(new CenteredText(canvas, text, GuiManager.Instance.TrajanNormal, FONT_SIZE_H3, "StatValue_" + header));
+            statStack.Children.Add(new AlignedText(canvas, header, GuiManager.Instance.TrajanBold, FONT_SIZE_H2, "Stat_" + header)
+            {
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center
+            });
+            statStack.Children.Add(new AlignedText(canvas, text, GuiManager.Instance.TrajanNormal, FONT_SIZE_H3, "StatValue_" + header)
+            { 
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center
+            });
             return statStack;
         }
 

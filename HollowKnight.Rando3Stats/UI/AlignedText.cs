@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace HollowKnight.Rando3Stats.UI
 {
-    public class CenteredText : ArrangableElement
+    public class AlignedText : ArrangableElement
     {
         private readonly GameObject textObj;
         private string textStr;
@@ -24,7 +24,7 @@ namespace HollowKnight.Rando3Stats.UI
             }
         }
 
-        public CenteredText(GameObject canvas, string text, Font font, int fontSize, string name = "Text") : base(canvas, name)
+        public AlignedText(GameObject canvas, string text, Font font, int fontSize, string name = "Text") : base(canvas, name)
         {
             textStr = text;
 
@@ -71,9 +71,7 @@ namespace HollowKnight.Rando3Stats.UI
             RectTransform tx = textObj.GetComponent<RectTransform>();
 
             // place the center of the text transform at the center of the area
-            (float cx, float cy) = availableSpace.center;
-            Vector2 pos = GuiManager.MakeAnchorPosition(new Vector2(cx - DesiredSize.x / 2, cy - DesiredSize.y / 2),
-                GuiManager.ReferenceSize);
+            Vector2 pos = GuiManager.MakeAnchorPosition(GetAlignedTopLeftCorner(availableSpace), GuiManager.ReferenceSize);
             tx.anchorMax = pos;
             tx.anchorMin = pos;
 
