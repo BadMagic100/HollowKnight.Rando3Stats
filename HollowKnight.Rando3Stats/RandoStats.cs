@@ -45,7 +45,7 @@ namespace HollowKnight.Rando3Stats
 
         public override string GetVersion()
         {
-            string ver = "1.1.0";
+            string ver = "1.1.1";
             int minAPI = 45;
 
             bool apiTooLow = Convert.ToInt32(ModHooks.Instance.ModVersion.Split('-')[1]) < minAPI;
