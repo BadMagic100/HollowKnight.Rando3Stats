@@ -1,7 +1,6 @@
 ﻿using Modding;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
 
 namespace HollowKnight.Rando3Stats.UI
 {

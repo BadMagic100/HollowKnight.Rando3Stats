@@ -2,11 +2,10 @@
 using HollowKnight.Rando3Stats.UI;
 using Modding;
 using SereCore;
-using System.Linq;
 using System;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
-using UnityEngine.UI;
 using Rando = RandomizerMod.RandomizerMod;
 
 namespace HollowKnight.Rando3Stats

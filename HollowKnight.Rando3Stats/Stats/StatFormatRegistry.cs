@@ -1,8 +1,5 @@
-﻿using Modding;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace HollowKnight.Rando3Stats.Stats

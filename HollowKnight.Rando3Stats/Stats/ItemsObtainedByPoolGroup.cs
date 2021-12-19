@@ -1,9 +1,6 @@
 ﻿using HollowKnight.Rando3Stats.Util;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Modding;
+using System.Linq;
 using Rando = RandomizerMod.RandomizerMod;
 
 namespace HollowKnight.Rando3Stats.Stats

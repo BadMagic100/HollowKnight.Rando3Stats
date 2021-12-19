@@ -1,6 +1,4 @@
-﻿using HollowKnight.Rando3Stats.Util;
-using UnityEngine;
-using UnityEngine.Events;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace HollowKnight.Rando3Stats.UI
