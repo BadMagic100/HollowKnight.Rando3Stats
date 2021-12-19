@@ -31,9 +31,7 @@ namespace HollowKnight.Rando3Stats
         private float pressStartTime = 0;
         private bool holdToSkipLock = false;
 
-        private AlignedRect? progressRect;
-        private AlignedText? clipboardPrompt;
-        private Layout? refLayout;
+        private LayoutOrchestrator? layoutOrchestrator;
 
         public override ModSettings GlobalSettings
         {
@@ -100,7 +98,8 @@ namespace HollowKnight.Rando3Stats
                 hideRecents.Invoke(null, null);
 
                 holdToSkipLock = false;
-                GameObject canvas = GuiManager.Instance.GetCanvasForScene("StatsCanvas");
+                GameObject canvas = GuiManager.Instance.CreateCanvas("StatsCanvas");
+                layoutOrchestrator = canvas.GetComponent<LayoutOrchestrator>();
 
                 Log("Calculating statistics");
 
@@ -113,7 +112,6 @@ namespace HollowKnight.Rando3Stats
                 IToggleableStatistic totalTransitionStat = new TotalTransitionsFound("Total");
 
                 Layout locationPoolStatGroup = new DynamicGridLayout(canvas, HORIZONTAL_SPACING, VERTICAL_SPACING, 2, HorizontalAlignment.Center);
-                refLayout = locationPoolStatGroup;
                 foreach (IToggleableStatistic poolStat in LocationsCheckedByPoolGroup.GetAllPoolGroups())
                 {
                     if (poolStat.IsEnabled)
@@ -180,14 +178,14 @@ namespace HollowKnight.Rando3Stats
                 statGroupTopRight.PositionAt(new Vector2(1920 - HORIZONTAL_PADDING, VERTICAL_PADDING));
                 statGroupBottomRight.PositionAt(new Vector2(1920 - HORIZONTAL_PADDING, 1080 - VERTICAL_PADDING));
 
-                progressRect = new AlignedRect(canvas, Color.white, 40, 40, "ProgressRect")
+                AlignedRect progressRect = new(canvas, Color.white, 40, 40, "ProgressRect")
                 {
                     VerticalAlignment = VerticalAlignment.Center,
                     HorizontalAlignment = HorizontalAlignment.Center
                 };
                 progressRect.PositionAt(new Vector2(960, 1060));
 
-                clipboardPrompt = new AlignedText(canvas, "Press Ctrl+C to copy completion", GuiManager.Instance.TrajanNormal, FONT_SIZE_H2, "CopyPrompt")
+                AlignedText clipboardPrompt = new(canvas, "Press Ctrl+C to copy completion", GuiManager.Instance.TrajanNormal, FONT_SIZE_H2, "CopyPrompt")
                 {
                     VerticalAlignment = VerticalAlignment.Center,
                     HorizontalAlignment = HorizontalAlignment.Center
@@ -220,6 +218,10 @@ namespace HollowKnight.Rando3Stats
             else
             {
                 if (holdToSkipLock) return;
+
+                AlignedRect? progressRect = layoutOrchestrator?.Find<AlignedRect>("ProgressRect");
+                AlignedText? clipboardPrompt = layoutOrchestrator?.Find<AlignedText>("CopyPrompt");
+
                 // if these don't exist something has gone badly; just do the default input behaviour instead
                 if (progressRect == null || clipboardPrompt == null)
                 {
@@ -252,7 +254,7 @@ namespace HollowKnight.Rando3Stats
                         holdToSkipLock = true;
                         GameManager.instance.SkipCutscene();
                         // fade our stuff out too
-                        GameObject.Find("StatsCanvas").AddComponent<CanvasGroupLinearFade>().duration = 0.5f;
+                        //GameObject.Find("StatsCanvas").AddComponent<CanvasGroupLinearFade>().duration = 0.5f;
                     }
                     float progressPercentage = (Time.time - pressStartTime) / LENGTH_OF_PRESS_TO_SKIP;
                     progressRect.Width = GuiManager.ReferenceSize.x * progressPercentage;

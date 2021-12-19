@@ -12,6 +12,7 @@ namespace HollowKnight.Rando3Stats.UI
         private static SimpleLogger log = new("RandoStats:LayoutOrchestrator");
 
         private readonly List<ArrangableElement> elements = new();
+        private readonly Dictionary<string, List<ArrangableElement>> elementLookup = new();
 
         public int measureBatch = 2;
         public int arrangeBatch = 5;
@@ -21,6 +22,59 @@ namespace HollowKnight.Rando3Stats.UI
             if (!elements.Contains(element))
             {
                 elements.Add(element);
+                if (!elementLookup.ContainsKey(element.Name))
+                {
+                    elementLookup[element.Name] = new List<ArrangableElement>();
+                }
+                elementLookup[element.Name].Add(element);
+            }
+        }
+
+        public ArrangableElement? Find(string name)
+        {
+            if (elementLookup.ContainsKey(name))
+            {
+                return elementLookup[name].First();
+            } 
+            else
+            {
+                return null;
+            }
+        }
+
+        public IEnumerable<ArrangableElement> FindAll(string name)
+        {
+            if (elementLookup.ContainsKey(name))
+            {
+                return elementLookup[name].AsReadOnly();
+            }
+            else 
+            {
+                return Enumerable.Empty<ArrangableElement>();
+            }
+        }
+
+        public T? Find<T>(string name) where T : ArrangableElement
+        {
+            if (elementLookup.ContainsKey(name))
+            {
+                return elementLookup[name].OfType<T>().FirstOrDefault();
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public IEnumerable<T> FindAll<T>(string name) where T : ArrangableElement
+        {
+            if (elementLookup.ContainsKey(name))
+            {
+                return elementLookup[name].OfType<T>();
+            }
+            else
+            {
+                return Enumerable.Empty<T>();
             }
         }
 

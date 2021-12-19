@@ -56,6 +56,11 @@ namespace HollowKnight.Rando3Stats.UI
             imgObj.AddComponent<Image>().color = color;
 
             imgObj.transform.SetParent(canvas.transform, false);
+            if (canvas.GetComponent<PersistComponent>() != null)
+            {
+                imgObj.AddComponent<PersistComponent>();
+            }
+
             // hide until the first arrange cycle
             imgObj.SetActive(false);
         }

@@ -1,6 +1,7 @@
 ﻿using Modding;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 namespace HollowKnight.Rando3Stats.UI
 {
@@ -24,9 +25,9 @@ namespace HollowKnight.Rando3Stats.UI
         }
 
         /// <summary>
-        /// Creates a new canvas game object that will be destroyed on scene transition
+        /// Creates a new canvas game object with basic components and settings
         /// </summary>
-        public GameObject GetCanvasForScene(string name = "Canvas")
+        public GameObject CreateCanvas(string name = "Canvas", bool persist = false)
         {
             GameObject rootCanvas = new(name);
             rootCanvas.AddComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
@@ -35,10 +36,26 @@ namespace HollowKnight.Rando3Stats.UI
             scale.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             rootCanvas.AddComponent<GraphicRaycaster>();
             CanvasGroup group = rootCanvas.AddComponent<CanvasGroup>();
-            group.interactable = true;
-            group.blocksRaycasts = true;
+            group.interactable = false;
+            group.blocksRaycasts = false;
             rootCanvas.AddComponent<LayoutOrchestrator>();
+
+            if (persist)
+            {
+                rootCanvas.AddComponent<PersistComponent>();
+            }
             return rootCanvas;
+        }
+
+        public void DestroyCanvas(GameObject canvas)
+        {
+            if (canvas != null)
+            {
+                foreach (PersistComponent p in canvas.GetComponentsInChildren<PersistComponent>(true))
+                {
+                    p.Destroy();
+                }
+            }
         }
 
         /// <summary>
