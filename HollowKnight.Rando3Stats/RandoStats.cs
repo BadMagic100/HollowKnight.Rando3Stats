@@ -1,8 +1,10 @@
-﻿using HollowKnight.Rando3Stats.Stats;
+﻿using HollowKnight.Rando3Stats.StatLayouts;
+using HollowKnight.Rando3Stats.Stats;
 using HollowKnight.Rando3Stats.UI;
 using Modding;
 using SereCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
@@ -16,16 +18,6 @@ namespace HollowKnight.Rando3Stats
 
         private const string END_GAME_COMPLETION = "End_Game_Completion";
         private const float LENGTH_OF_PRESS_TO_SKIP = 1.5f;
-
-        private const float HORIZONTAL_PADDING = 5;
-        private const float VERTICAL_PADDING = 10;
-
-        private const float VERTICAL_SPACING = 8;
-        private const float HORIZONTAL_SPACING = 10;
-
-        private const int FONT_SIZE_H1 = 25;
-        private const int FONT_SIZE_H2 = 18;
-        private const int FONT_SIZE_H3 = 15;
 
         private float pressStartTime = 0;
         private bool holdToSkipLock = false;
@@ -102,80 +94,57 @@ namespace HollowKnight.Rando3Stats
 
                 Log("Calculating statistics");
 
-                IRandomizerStatistic totalLocationStat = new TotalLocationsChecked("Total");
-                Layout totalLocationStatText = GetStatText(canvas, totalLocationStat);
+                Layout statGroupTopLeft = new VerticalStackLayout(canvas, StatLayoutHelper.VERTICAL_SPACING * 1.5f);
+                Layout statGroupTopCenter = new VerticalStackLayout(canvas, StatLayoutHelper.VERTICAL_SPACING * 1.5f, HorizontalAlignment.Center);
+                Layout statGroupTopRight = new VerticalStackLayout(canvas, StatLayoutHelper.VERTICAL_SPACING * 1.5f, HorizontalAlignment.Right);
+                Layout statGroupBottomLeft = new VerticalStackLayout(canvas, StatLayoutHelper.VERTICAL_SPACING * 1.5f, 
+                    HorizontalAlignment.Left, VerticalAlignment.Bottom);
+                Layout statGroupBottomRight = new VerticalStackLayout(canvas, StatLayoutHelper.VERTICAL_SPACING * 1.5f,
+                    HorizontalAlignment.Right, VerticalAlignment.Bottom);
 
-                IRandomizerStatistic totalItemStat = new TotalItemsObtained("Total");
-                Layout totalItemStatText = GetStatText(canvas, totalItemStat);
-
-                IToggleableStatistic totalTransitionStat = new TotalTransitionsFound("Total");
-
-                Layout locationPoolStatGroup = new DynamicGridLayout(canvas, HORIZONTAL_SPACING, VERTICAL_SPACING, 2, HorizontalAlignment.Center);
-                foreach (IToggleableStatistic poolStat in LocationsCheckedByPoolGroup.GetAllPoolGroups())
+                IEnumerable<IGrouping<StatPosition, StatLayoutData>> statData = Settings.StatConfig.OrderBy(x => x.Order).GroupBy(x => x.Position);
+                foreach (var group in statData)
                 {
-                    if (poolStat.IsEnabled)
+                    if (group.Key == StatPosition.None)
                     {
-                        locationPoolStatGroup.Children.Add(GetStatText(canvas, poolStat));
-                    }
-                }
-                IRandomizerStatistic geoShopLocationStat = new GeoShopChecksSeen("Geo Shops");
-                locationPoolStatGroup.Children.Add(GetStatText(canvas, geoShopLocationStat));
-
-                Layout itemPoolStatGroup = new DynamicGridLayout(canvas, HORIZONTAL_SPACING, VERTICAL_SPACING, 2, HorizontalAlignment.Center);
-                foreach (IToggleableStatistic poolStat in ItemsObtainedByPoolGroup.GetAllPoolGroups())
-                {
-                    if (poolStat.IsEnabled)
-                    {
-                        itemPoolStatGroup.Children.Add(GetStatText(canvas, poolStat));
-                    }
-                }
-
-                Layout statGroupTopLeft = new VerticalStackLayout(canvas, VERTICAL_SPACING);
-                statGroupTopLeft.Children.Add(new AlignedText(canvas, "Locations Found", GuiManager.Instance.TrajanBold, FONT_SIZE_H1)
-                {
-                    VerticalAlignment = VerticalAlignment.Center,
-                    HorizontalAlignment = HorizontalAlignment.Center
-                });
-                statGroupTopLeft.Children.Add(totalLocationStatText);
-                statGroupTopLeft.Children.Add(locationPoolStatGroup);
-
-                Layout statGroupTopRight = new VerticalStackLayout(canvas, VERTICAL_SPACING, HorizontalAlignment.Right);
-                statGroupTopRight.Children.Add(new AlignedText(canvas, "Items Obtained", GuiManager.Instance.TrajanBold, FONT_SIZE_H1)
-                {
-                    VerticalAlignment = VerticalAlignment.Center,
-                    HorizontalAlignment = HorizontalAlignment.Center
-                });
-                statGroupTopRight.Children.Add(totalItemStatText);
-                statGroupTopRight.Children.Add(itemPoolStatGroup);
-
-                Layout statGroupBottomRight = new VerticalStackLayout(canvas, VERTICAL_SPACING, HorizontalAlignment.Right, VerticalAlignment.Bottom);
-
-                if (totalTransitionStat.IsEnabled)
-                {
-                    Layout totalTransitionStatText = GetStatText(canvas, totalTransitionStat);
-                    statGroupBottomRight.Children.Add(new AlignedText(canvas, "Transitions Found", GuiManager.Instance.TrajanBold, FONT_SIZE_H1)
-                    {
-                        VerticalAlignment = VerticalAlignment.Center,
-                        HorizontalAlignment = HorizontalAlignment.Center
-                    });
-                    statGroupBottomRight.Children.Add(totalTransitionStatText);
-
-                    Layout transitionAreaStatGroup = new DynamicGridLayout(canvas, HORIZONTAL_SPACING, VERTICAL_SPACING, 2, HorizontalAlignment.Center);
-                    foreach (IToggleableStatistic areaStat in TransitionsFoundByArea.GetAllAreas())
-                    {
-                        if (areaStat.IsEnabled)
+                        // still go compute all the stats, just don't draw them
+                        foreach (StatLayoutData data in group)
                         {
-                            transitionAreaStatGroup.Children.Add(GetStatText(canvas, areaStat));
+                            StatLayoutBase? statLayout = StatLayoutHelper.GetLayoutBuilderFromSettings(data);
+                            statLayout?.ComputeStatsOnly();
                         }
                     }
-                    statGroupBottomRight.Children.Add(transitionAreaStatGroup);
+                    else
+                    {
+                        int gridColumns = StatLayoutHelper.GetDynamicGridColumnsForPosition(group.Key);
+                        Layout targetLayout = group.Key switch
+                        {
+                            StatPosition.TopLeft => statGroupTopLeft,
+                            StatPosition.TopCenter => statGroupTopCenter,
+                            StatPosition.TopRight => statGroupTopRight,
+                            StatPosition.BottomLeft => statGroupBottomLeft,
+                            StatPosition.BottomRight => statGroupBottomRight,
+                            _ => throw new NotImplementedException($"No available panel to lay out {group.Key}"),
+                        };
+                        foreach (StatLayoutData data in group)
+                        {
+                            StatLayoutBase? statLayout = StatLayoutHelper.GetLayoutBuilderFromSettings(data);
+                            if (statLayout != null && statLayout.ShouldDisplayForRandoSettings())
+                            {
+                                targetLayout.Children.Add(statLayout.BuildLayout(canvas, gridColumns));
+                            }
+                        }
+                    }
                 }
 
                 Log("Starting layout step.");
 
-                statGroupTopLeft.PositionAt(new Vector2(HORIZONTAL_PADDING, VERTICAL_PADDING));
-                statGroupTopRight.PositionAt(new Vector2(1920 - HORIZONTAL_PADDING, VERTICAL_PADDING));
-                statGroupBottomRight.PositionAt(new Vector2(1920 - HORIZONTAL_PADDING, 1080 - VERTICAL_PADDING));
+                statGroupTopLeft.PositionAt(new Vector2(StatLayoutHelper.HORIZONTAL_PADDING, StatLayoutHelper.VERTICAL_PADDING));
+                statGroupTopCenter.PositionAt(new Vector2(GuiManager.ReferenceSize.x / 2, StatLayoutHelper.VERTICAL_PADDING));
+                statGroupTopRight.PositionAt(new Vector2(GuiManager.ReferenceSize.x - StatLayoutHelper.HORIZONTAL_PADDING, StatLayoutHelper.VERTICAL_PADDING));
+                statGroupBottomLeft.PositionAt(new Vector2(StatLayoutHelper.HORIZONTAL_PADDING, GuiManager.ReferenceSize.y - StatLayoutHelper.VERTICAL_PADDING));
+                statGroupBottomRight.PositionAt(new Vector2(GuiManager.ReferenceSize.x - StatLayoutHelper.HORIZONTAL_PADDING, 
+                    GuiManager.ReferenceSize.y - StatLayoutHelper.VERTICAL_PADDING));
 
                 AlignedRect progressRect = new(canvas, Color.white, 40, 40, "ProgressRect")
                 {
@@ -184,7 +153,7 @@ namespace HollowKnight.Rando3Stats
                 };
                 progressRect.PositionAt(new Vector2(960, 1060));
 
-                AlignedText clipboardPrompt = new(canvas, "Press Ctrl+C to copy completion", GuiManager.Instance.TrajanNormal, FONT_SIZE_H2, "CopyPrompt")
+                AlignedText clipboardPrompt = new(canvas, "Press Ctrl+C to copy completion", GuiManager.Instance.TrajanNormal, StatLayoutHelper.FONT_SIZE_H2, "CopyPrompt")
                 {
                     VerticalAlignment = VerticalAlignment.Center,
                     HorizontalAlignment = HorizontalAlignment.Center
@@ -253,7 +222,7 @@ namespace HollowKnight.Rando3Stats
                         holdToSkipLock = true;
                         GameManager.instance.SkipCutscene();
                         // fade our stuff out too
-                        //GameObject.Find("StatsCanvas").AddComponent<CanvasGroupLinearFade>().duration = 0.5f;
+                        GameObject.Find("StatsCanvas").AddComponent<CanvasGroupLinearFade>().duration = 0.5f;
                     }
                     float progressPercentage = (Time.time - pressStartTime) / LENGTH_OF_PRESS_TO_SKIP;
                     progressRect.Width = GuiManager.ReferenceSize.x * progressPercentage;
@@ -264,24 +233,6 @@ namespace HollowKnight.Rando3Stats
                     progressRect.Width = 0;
                 }
             }
-        }
-
-        private Layout GetStatText(GameObject canvas, IRandomizerStatistic stat)
-        {
-            string header = stat.GetHeader();
-            string text = stat.GetContent();
-            Layout statStack = new VerticalStackLayout(canvas, 5f, HorizontalAlignment.Center);
-            statStack.Children.Add(new AlignedText(canvas, header, GuiManager.Instance.TrajanBold, FONT_SIZE_H2, "Stat_" + header)
-            {
-                VerticalAlignment = VerticalAlignment.Center,
-                HorizontalAlignment = HorizontalAlignment.Center
-            });
-            statStack.Children.Add(new AlignedText(canvas, text, GuiManager.Instance.TrajanNormal, FONT_SIZE_H3, "StatValue_" + header)
-            { 
-                VerticalAlignment = VerticalAlignment.Center,
-                HorizontalAlignment = HorizontalAlignment.Center
-            });
-            return statStack;
         }
 
         private void SkipTHK(On.GameManager.orig_BeginSceneTransition orig, GameManager self, GameManager.SceneLoadInfo info)

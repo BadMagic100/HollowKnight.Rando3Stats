@@ -17,7 +17,8 @@ namespace HollowKnight.Rando3Stats.Stats
         private static readonly Dictionary<string, string> statRegistry = new();
         private static readonly Dictionary<string, string> aliases = new()
         {
-            { "RACING_EXTENDED", $"{{{NS_BUILT_IN}:{STAT_TIME}}} {{TotalItemsObtained:{STAT_FULL}}}" },
+            { "RACING_EXTENDED", 
+                $"{{{NS_BUILT_IN}:{STAT_TIME}}} {{{NS_BUILT_IN}:{STAT_PERCENT}}} ({{TotalItemsObtained:{STAT_OBTAINED}}}/{{TotalItemsObtained:{STAT_TOTAL}}})" },
             { "RACING_SIMPLE", $"{{{NS_BUILT_IN}:{STAT_TIME}}} {{{NS_BUILT_IN}:{STAT_PERCENT}}}" }
         };
 
