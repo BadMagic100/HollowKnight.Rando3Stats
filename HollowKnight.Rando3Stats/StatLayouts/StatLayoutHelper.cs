@@ -40,18 +40,65 @@ namespace HollowKnight.Rando3Stats.StatLayouts
             return statStack;
         }
 
-        internal static StatLayoutBase? GetLayoutBuilderFromSettings(StatLayoutData data)
+        // assuming that each position is only visited once, so no need to cache
+        internal static Layout? GetLayoutForPosition(GameObject canvas, StatPosition pos)
+        {
+            if (pos == StatPosition.None)
+            {
+                return null;
+            }
+            else
+            {
+                HorizontalAlignment desiredHorizontal = pos.ToString() switch
+                {
+                    var left when left.EndsWith("Left") => HorizontalAlignment.Left,
+                    var center when center.EndsWith("Center") => HorizontalAlignment.Center,
+                    var right when right.EndsWith("Right") => HorizontalAlignment.Right,
+                    _ => throw new NotImplementedException($"Can't infer horizontal alignment from {pos}")
+                };
+                VerticalAlignment desiredVertical = pos.ToString() switch
+                {
+                    var top when top.StartsWith("Top") => VerticalAlignment.Top,
+                    var bottom when bottom.StartsWith("Bottom") => VerticalAlignment.Bottom,
+                    _ => throw new NotImplementedException($"Can't infer vertical alignment from {pos}")
+                };
+                return new VerticalStackLayout(canvas, VERTICAL_SPACING * 1.5f, desiredHorizontal, desiredVertical);
+            }
+        }
+
+        internal static void SetPanelPosition(Layout? panel)
+        {
+            if (panel == null) return;
+
+            float x = panel.HorizontalAlignment switch
+            {
+                HorizontalAlignment.Left => HORIZONTAL_PADDING,
+                HorizontalAlignment.Center => GuiManager.ReferenceSize.x / 2,
+                HorizontalAlignment.Right => GuiManager.ReferenceSize.x - HORIZONTAL_PADDING,
+                _ => throw new NotImplementedException($"Can't handle horizontal alignment {panel.HorizontalAlignment}")
+            };
+            float y = panel.VerticalAlignment switch
+            {
+                VerticalAlignment.Top => VERTICAL_PADDING,
+                VerticalAlignment.Center => GuiManager.ReferenceSize.y / 2,
+                VerticalAlignment.Bottom => GuiManager.ReferenceSize.y - VERTICAL_PADDING,
+                _ => throw new NotImplementedException($"Can't handle vertical alignment {panel.VerticalAlignment}")
+            };
+            panel.PositionAt(new Vector2(x, y));
+        }
+
+        internal static StatLayoutFactoryBase? GetLayoutBuilderFromSettings(StatLayoutData data)
         {
             string className = $"{data.Stat}StatLayout";
             Type layoutClass = Type.GetType($"HollowKnight.Rando3Stats.StatLayouts.{className}");
-            if (data.Stat == null || layoutClass == null || !typeof(StatLayoutBase).IsAssignableFrom(layoutClass))
+            if (data.Stat == null || layoutClass == null || !typeof(StatLayoutFactoryBase).IsAssignableFrom(layoutClass))
             {
                 log.LogWarn($"Encountered a stat data without a valid target stat - cannot display: {data.Stat}");
                 return null;
             }
 
             ConstructorInfo ctor = layoutClass.GetConstructor(new Type[] { typeof(HashSet<string>) });
-            return (StatLayoutBase)ctor.Invoke(new object[] { data.EnabledSubcategories });
+            return (StatLayoutFactoryBase)ctor.Invoke(new object[] { data.EnabledSubcategories });
         }
 
         internal static int GetDynamicGridColumnsForPosition(StatPosition position) => position switch

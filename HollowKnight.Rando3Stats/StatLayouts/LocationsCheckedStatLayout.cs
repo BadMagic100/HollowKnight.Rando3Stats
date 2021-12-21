@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace HollowKnight.Rando3Stats.StatLayouts
 {
-    internal class LocationsCheckedStatLayout : StatLayoutBase
+    internal class LocationsCheckedStatLayout : StatLayoutFactoryBase
     {
         public LocationsCheckedStatLayout(HashSet<string> enabledSubcategories) : base(enabledSubcategories)
         {

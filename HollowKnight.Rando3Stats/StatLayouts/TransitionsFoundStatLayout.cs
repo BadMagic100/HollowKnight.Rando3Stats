@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace HollowKnight.Rando3Stats.StatLayouts
 {
-    internal class TransitionsFoundStatLayout : StatLayoutBase
+    internal class TransitionsFoundStatLayout : StatLayoutFactoryBase
     {
         private readonly TotalTransitionsFound transitionsFound;
 

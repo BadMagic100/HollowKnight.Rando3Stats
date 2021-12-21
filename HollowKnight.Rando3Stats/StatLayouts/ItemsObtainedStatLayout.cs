@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace HollowKnight.Rando3Stats.StatLayouts
 {
-    internal class ItemsObtainedStatLayout : StatLayoutBase
+    internal class ItemsObtainedStatLayout : StatLayoutFactoryBase
     {
         public ItemsObtainedStatLayout(HashSet<string> enabledSubcategories) : base(enabledSubcategories)
         {

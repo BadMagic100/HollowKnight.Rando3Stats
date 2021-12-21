@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace HollowKnight.Rando3Stats.StatLayouts
 {
-    internal abstract class StatLayoutBase
+    internal abstract class StatLayoutFactoryBase
     {
         protected HashSet<string> EnabledSubcategories { get; private set; }
 
-        public StatLayoutBase(HashSet<string> enabledSubcategories)
+        public StatLayoutFactoryBase(HashSet<string> enabledSubcategories)
         {
             EnabledSubcategories = enabledSubcategories;
         }

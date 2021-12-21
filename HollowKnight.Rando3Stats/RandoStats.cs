@@ -79,8 +79,7 @@ namespace HollowKnight.Rando3Stats
 
         private void GameCompletionScreen_Start(On.GameCompletionScreen.orig_Start orig, GameCompletionScreen self)
         {
-            bool isRando = Rando.Instance.Settings.Randomizer;
-            if (isRando)
+            if (Rando.Instance.Settings.Randomizer)
             {
                 // we don't need to see the recent items panel on the end screen, clear it out to make more room for stats!
                 Assembly randoAsm = Assembly.GetAssembly(typeof(Rando));
@@ -92,66 +91,37 @@ namespace HollowKnight.Rando3Stats
                 GameObject canvas = GuiManager.Instance.CreateCanvas("StatsCanvas");
                 layoutOrchestrator = canvas.GetComponent<LayoutOrchestrator>();
 
-                Log("Calculating statistics");
-
-                Layout statGroupTopLeft = new VerticalStackLayout(canvas, StatLayoutHelper.VERTICAL_SPACING * 1.5f);
-                Layout statGroupTopCenter = new VerticalStackLayout(canvas, StatLayoutHelper.VERTICAL_SPACING * 1.5f, HorizontalAlignment.Center);
-                Layout statGroupTopRight = new VerticalStackLayout(canvas, StatLayoutHelper.VERTICAL_SPACING * 1.5f, HorizontalAlignment.Right);
-                Layout statGroupBottomLeft = new VerticalStackLayout(canvas, StatLayoutHelper.VERTICAL_SPACING * 1.5f, 
-                    HorizontalAlignment.Left, VerticalAlignment.Bottom);
-                Layout statGroupBottomRight = new VerticalStackLayout(canvas, StatLayoutHelper.VERTICAL_SPACING * 1.5f,
-                    HorizontalAlignment.Right, VerticalAlignment.Bottom);
+                Log("Starting layout step.");
 
                 IEnumerable<IGrouping<StatPosition, StatLayoutData>> statData = Settings.StatConfig.OrderBy(x => x.Order).GroupBy(x => x.Position);
                 foreach (var group in statData)
                 {
-                    if (group.Key == StatPosition.None)
+                    Layout? targetLayout = StatLayoutHelper.GetLayoutForPosition(canvas, group.Key);
+                    int gridColumns = StatLayoutHelper.GetDynamicGridColumnsForPosition(group.Key);
+                    foreach (StatLayoutData data in group)
                     {
-                        // still go compute all the stats, just don't draw them
-                        foreach (StatLayoutData data in group)
+                        StatLayoutFactoryBase? layoutFactory = StatLayoutHelper.GetLayoutBuilderFromSettings(data);
+                        if (layoutFactory != null && layoutFactory.ShouldDisplayForRandoSettings())
                         {
-                            StatLayoutBase? statLayout = StatLayoutHelper.GetLayoutBuilderFromSettings(data);
-                            statLayout?.ComputeStatsOnly();
-                        }
-                    }
-                    else
-                    {
-                        int gridColumns = StatLayoutHelper.GetDynamicGridColumnsForPosition(group.Key);
-                        Layout targetLayout = group.Key switch
-                        {
-                            StatPosition.TopLeft => statGroupTopLeft,
-                            StatPosition.TopCenter => statGroupTopCenter,
-                            StatPosition.TopRight => statGroupTopRight,
-                            StatPosition.BottomLeft => statGroupBottomLeft,
-                            StatPosition.BottomRight => statGroupBottomRight,
-                            _ => throw new NotImplementedException($"No available panel to lay out {group.Key}"),
-                        };
-                        foreach (StatLayoutData data in group)
-                        {
-                            StatLayoutBase? statLayout = StatLayoutHelper.GetLayoutBuilderFromSettings(data);
-                            if (statLayout != null && statLayout.ShouldDisplayForRandoSettings())
+                            if (targetLayout != null)
                             {
-                                targetLayout.Children.Add(statLayout.BuildLayout(canvas, gridColumns));
+                                targetLayout.Children.Add(layoutFactory.BuildLayout(canvas, gridColumns));
+                            }
+                            else
+                            {
+                                layoutFactory.ComputeStatsOnly();
                             }
                         }
                     }
+                    StatLayoutHelper.SetPanelPosition(targetLayout);
                 }
-
-                Log("Starting layout step.");
-
-                statGroupTopLeft.PositionAt(new Vector2(StatLayoutHelper.HORIZONTAL_PADDING, StatLayoutHelper.VERTICAL_PADDING));
-                statGroupTopCenter.PositionAt(new Vector2(GuiManager.ReferenceSize.x / 2, StatLayoutHelper.VERTICAL_PADDING));
-                statGroupTopRight.PositionAt(new Vector2(GuiManager.ReferenceSize.x - StatLayoutHelper.HORIZONTAL_PADDING, StatLayoutHelper.VERTICAL_PADDING));
-                statGroupBottomLeft.PositionAt(new Vector2(StatLayoutHelper.HORIZONTAL_PADDING, GuiManager.ReferenceSize.y - StatLayoutHelper.VERTICAL_PADDING));
-                statGroupBottomRight.PositionAt(new Vector2(GuiManager.ReferenceSize.x - StatLayoutHelper.HORIZONTAL_PADDING, 
-                    GuiManager.ReferenceSize.y - StatLayoutHelper.VERTICAL_PADDING));
 
                 AlignedRect progressRect = new(canvas, Color.white, 40, 40, "ProgressRect")
                 {
                     VerticalAlignment = VerticalAlignment.Center,
                     HorizontalAlignment = HorizontalAlignment.Center
                 };
-                progressRect.PositionAt(new Vector2(960, 1060));
+                progressRect.PositionAt(new Vector2(GuiManager.ReferenceSize.x / 2, 1060));
 
                 AlignedText clipboardPrompt = new(canvas, "Press Ctrl+C to copy completion", GuiManager.Instance.TrajanNormal, StatLayoutHelper.FONT_SIZE_H2, "CopyPrompt")
                 {
