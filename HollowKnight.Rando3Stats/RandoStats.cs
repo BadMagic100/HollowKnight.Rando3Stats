@@ -2,8 +2,8 @@
 using HollowKnight.Rando3Stats.Stats;
 using HollowKnight.Rando3Stats.UI;
 using Modding;
-using SereCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -57,15 +57,38 @@ namespace HollowKnight.Rando3Stats
 
             Log("RandoStats initializing...");
 
-#if DEBUG
-            On.GameManager.BeginSceneTransition += SkipTHK;
-#endif
+            On.HeroController.Awake += HeroController_Awake;
+            On.QuitToMenu.Start += QuitToMenu_Start;
             On.GameCompletionScreen.Start += GameCompletionScreen_Start;
             On.InputHandler.CutsceneInput += InputHandler_CutsceneInput;
 
             ModHooks.Instance.LanguageGetHook += GetLanguageString;
 
             Log("RandoStats finished initializing.");
+        }
+
+        private void TryDeleteHotkeyListener()
+        {
+            GameObject hotkeyListener = GameObject.Find("RandoStats_HotkeyListener");
+            Log($"Found hotkey listener: {hotkeyListener != null}");
+            if (hotkeyListener != null)
+            {
+                UnityEngine.Object.Destroy(hotkeyListener);
+            }
+        }
+
+        private IEnumerator QuitToMenu_Start(On.QuitToMenu.orig_Start orig, QuitToMenu self)
+        {
+            TryDeleteHotkeyListener();
+            return orig(self);
+        }
+
+        private void HeroController_Awake(On.HeroController.orig_Awake orig, HeroController self)
+        {
+            GameObject hotkeyListener = new("RandoStats_HotkeyListener");
+            UnityEngine.Object.DontDestroyOnLoad(hotkeyListener);
+            hotkeyListener.AddComponent<HotkeyGoToCompletionScreen>();
+            orig(self);
         }
 
         private string GetLanguageString(string key, string sheetTitle)
@@ -79,6 +102,7 @@ namespace HollowKnight.Rando3Stats
 
         private void GameCompletionScreen_Start(On.GameCompletionScreen.orig_Start orig, GameCompletionScreen self)
         {
+            TryDeleteHotkeyListener();
             if (Rando.Instance.Settings.Randomizer)
             {
                 // we don't need to see the recent items panel on the end screen, clear it out to make more room for stats!
@@ -94,7 +118,7 @@ namespace HollowKnight.Rando3Stats
                 Log("Starting layout step.");
 
                 IEnumerable<IGrouping<StatPosition, StatLayoutData>> statData = Settings.StatConfig.OrderBy(x => x.Order).GroupBy(x => x.Position);
-                foreach (var group in statData)
+                foreach (IGrouping<StatPosition, StatLayoutData> group in statData)
                 {
                     Layout? targetLayout = StatLayoutHelper.GetLayoutForPosition(canvas, group.Key);
                     int gridColumns = StatLayoutHelper.GetDynamicGridColumnsForPosition(group.Key);
@@ -203,15 +227,6 @@ namespace HollowKnight.Rando3Stats
                     progressRect.Width = 0;
                 }
             }
-        }
-
-        private void SkipTHK(On.GameManager.orig_BeginSceneTransition orig, GameManager self, GameManager.SceneLoadInfo info)
-        {
-            if (info.SceneName == SceneNames.Room_Final_Boss_Core)
-            {
-                info.SceneName = "End_Game_Completion";
-            }
-            orig(self, info);
         }
     }
 }
