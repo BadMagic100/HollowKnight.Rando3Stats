@@ -22,6 +22,11 @@ namespace HollowKnight.Rando3Stats.StatLayouts
         internal const int FONT_SIZE_H2 = 18;
         internal const int FONT_SIZE_H3 = 15;
 
+        /// <summary>
+        /// Generates a layout with the stat's header and the stat's content in a sligntly smaller font
+        /// </summary>
+        /// <param name="canvas">The canvas to draw the elements on</param>
+        /// <param name="stat">The stat to compute and draw</param>
         internal static Layout GetLabeledStatText(GameObject canvas, IRandomizerStatistic stat)
         {
             string header = stat.GetHeader();
@@ -40,7 +45,12 @@ namespace HollowKnight.Rando3Stats.StatLayouts
             return statStack;
         }
 
-        // assuming that each position is only visited once, so no need to cache
+        /// <summary>
+        /// Given a position, generates a stack layout with the correct alignment for that position
+        /// </summary>
+        /// <param name="canvas">The canvas to draw the elements on</param>
+        /// <param name="pos">The stat position</param>
+        /// <returns></returns>
         internal static Layout? GetLayoutForPosition(GameObject canvas, StatPosition pos)
         {
             if (pos == StatPosition.None)
@@ -66,6 +76,10 @@ namespace HollowKnight.Rando3Stats.StatLayouts
             }
         }
 
+        /// <summary>
+        /// Sets the panel's anchoring position to the correct edge of the screen given its alignment and arranges its children.
+        /// </summary>
+        /// <param name="panel">The panel to position</param>
         internal static void SetPanelPosition(Layout? panel)
         {
             if (panel == null) return;
@@ -87,6 +101,11 @@ namespace HollowKnight.Rando3Stats.StatLayouts
             panel.PositionAt(new Vector2(x, y));
         }
 
+        /// <summary>
+        /// Parses layout data from settings to generate a stat layout builder
+        /// </summary>
+        /// <param name="data">The stat layout data from global settings</param>
+        /// <returns></returns>
         internal static StatLayoutFactoryBase? GetLayoutBuilderFromSettings(StatLayoutData data)
         {
             string className = $"{data.Stat}StatLayout";
@@ -101,6 +120,10 @@ namespace HollowKnight.Rando3Stats.StatLayouts
             return (StatLayoutFactoryBase)ctor.Invoke(new object[] { data.EnabledSubcategories });
         }
 
+        /// <summary>
+        /// Gets the number of columns to allocate to dynamic grids in a given stat position
+        /// </summary>
+        /// <param name="position">The position to check</param>
         internal static int GetDynamicGridColumnsForPosition(StatPosition position) => position switch
         {
             StatPosition.TopCenter => 6,

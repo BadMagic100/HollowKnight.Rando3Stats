@@ -5,28 +5,63 @@ using UnityEngine;
 
 namespace HollowKnight.Rando3Stats.StatLayouts
 {
+    /// <summary>
+    /// Base class to build configurable layouts for collections of stats
+    /// </summary>
     internal abstract class StatLayoutFactoryBase
     {
+        /// <summary>
+        /// A set of subcategories of stats to display
+        /// </summary>
         protected HashSet<string> EnabledSubcategories { get; private set; }
 
+        /// <summary>
+        /// Constructs a layout factory. Note that to work with <see cref="StatLayoutHelper.GetLayoutBuilderFromSettings(StatLayoutData)"/>,
+        /// you're expected to implement a constructor with this signature.
+        /// </summary>
+        /// <param name="enabledSubcategories">A set of subcategories of stats to display</param>
         public StatLayoutFactoryBase(HashSet<string> enabledSubcategories)
         {
             EnabledSubcategories = enabledSubcategories;
         }
 
+        /// <summary>
+        /// Determines whether the stat is eligible to display given the current randomizer settings
+        /// </summary>
         public abstract bool ShouldDisplayForRandoSettings();
 
+        /// <summary>
+        /// Gets the top-level section header for the stat group, such as "Items Obtained"
+        /// </summary>
         protected abstract string GetSectionHeader();
+        /// <summary>
+        /// Gets all the statistics that should display unconditionally.
+        /// </summary>
         protected abstract IEnumerable<IRandomizerStatistic> GetRootStatistics();
+        /// <summary>
+        /// Gets all subcategories that are allowed for this stat group. These cases, and only these cases, should be handled by
+        /// <see cref="GetStatisticsForSubcategory(string)"/>.
+        /// </summary>
         protected abstract IEnumerable<string> GetAllowedSubcategories();
+        /// <summary>
+        /// Gets all the statistics that should display given a subcategory. This expects you to
+        /// </summary>
+        /// <param name="subcategory">The subcategory name.</param>
         protected abstract IEnumerable<IRandomizerStatistic> GetStatisticsForSubcategory(string subcategory);
 
+        /// <summary>
+        /// Gets whether the stat is explicitly disabled - in other words, if it is both toggleable and disabled.
+        /// </summary>
+        /// <param name="stat">The stat to check.</param>
         private bool IsDisabled(IRandomizerStatistic stat)
         {
             return stat is IToggleableStatistic toggle && !toggle.IsEnabled;
         }
 
-        // for the specific purpose of adding things into the stat registry
+        /// <summary>
+        /// Computes the stats only, without creating any UI elements or layout. This is specifically for adding
+        /// stats to the stat registry.
+        /// </summary>
         public void ComputeStatsOnly()
         {
             foreach (IRandomizerStatistic stat in GetRootStatistics())
@@ -50,6 +85,12 @@ namespace HollowKnight.Rando3Stats.StatLayouts
             }
         }
 
+        /// <summary>
+        /// Computes the stats and builds them out in the specified layout.
+        /// </summary>
+        /// <param name="canvas">The visual parent to draw the UI on</param>
+        /// <param name="subcategoryColumns">The number of columns allocated to subcategories' dynamic layouts.</param>
+        /// <returns></returns>
         public Layout BuildLayout(GameObject canvas, int subcategoryColumns)
         {
             VerticalStackLayout layout = new(canvas, StatLayoutHelper.VERTICAL_SPACING, HorizontalAlignment.Center, name: GetType().Name);

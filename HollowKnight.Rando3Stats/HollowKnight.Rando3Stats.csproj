@@ -21,6 +21,7 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 	  <Optimize>true</Optimize>
 	  <DebugSymbols>false</DebugSymbols>
+	  <DocumentationFile></DocumentationFile>
 	</PropertyGroup>
 	<ItemGroup>
 	  <None Remove="StatLayouts\tcqktdgo.hov~" />
