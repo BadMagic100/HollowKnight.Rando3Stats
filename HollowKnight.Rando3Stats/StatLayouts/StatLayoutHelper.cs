@@ -32,12 +32,12 @@ namespace HollowKnight.Rando3Stats.StatLayouts
             string header = stat.GetHeader();
             string text = stat.GetContent();
             Layout statStack = new VerticalStackLayout(canvas, 5f, HorizontalAlignment.Center);
-            statStack.Children.Add(new AlignedText(canvas, header, GuiManager.Instance.TrajanBold, FONT_SIZE_H2, "Stat_" + header)
+            statStack.Children.Add(new TextObject(canvas, header, GuiManager.Instance.TrajanBold, FONT_SIZE_H2, "Stat_" + header)
             {
                 VerticalAlignment = VerticalAlignment.Center,
                 HorizontalAlignment = HorizontalAlignment.Center
             });
-            statStack.Children.Add(new AlignedText(canvas, text, GuiManager.Instance.TrajanNormal, FONT_SIZE_H3, "StatValue_" + header)
+            statStack.Children.Add(new TextObject(canvas, text, GuiManager.Instance.TrajanNormal, FONT_SIZE_H3, "StatValue_" + header)
             {
                 VerticalAlignment = VerticalAlignment.Center,
                 HorizontalAlignment = HorizontalAlignment.Center

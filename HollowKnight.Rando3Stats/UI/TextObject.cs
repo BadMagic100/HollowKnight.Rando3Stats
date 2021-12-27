@@ -3,45 +3,58 @@ using UnityEngine.UI;
 
 namespace HollowKnight.Rando3Stats.UI
 {
-    public class AlignedText : ArrangableElement
+    public class TextObject : ArrangableElement
     {
         private readonly GameObject textObj;
-        private string textStr;
+        private readonly Text textComponent;
+        private readonly RectTransform tx;
 
         public string Text
         {
-            get => textStr;
+            get => textComponent.text;
             set
             {
-                if (value != textStr)
+                if (value != textComponent.text)
                 {
-                    textStr = value;
-                    textObj.GetComponent<Text>().text = value;
+                    textComponent.text = value;
+                    tx.sizeDelta = MeasureText();
                     InvalidateMeasure();
                 }
             }
         }
 
-        public AlignedText(GameObject canvas, string text, Font font, int fontSize, string name = "Text") : base(canvas, name)
+        public TextAnchor TextAlignment
         {
-            textStr = text;
+            get => textComponent.alignment;
+            set
+            {
+                if (value != textComponent.alignment)
+                {
+                    textComponent.alignment = value;
+                    tx.sizeDelta = MeasureText();
+                    InvalidateMeasure();
+                }
+            }
+        }
 
+        public TextObject(GameObject canvas, string text, Font font, int fontSize, string name = "Text") : base(canvas, name)
+        {
             textObj = new GameObject(name);
             textObj.AddComponent<CanvasRenderer>();
 
             // note - it is (apparently) critically important to add the transform before the text.
             // Otherwise the text won't show (presumably because it's not transformed properly?)
             Vector2 pos = GuiManager.MakeAnchorPosition(new(0, 0), GuiManager.ReferenceSize);
-            RectTransform tx = textObj.AddComponent<RectTransform>();
-            tx.sizeDelta = GuiManager.ReferenceSize;
+            tx = textObj.AddComponent<RectTransform>();
             tx.anchorMin = pos;
             tx.anchorMax = pos;
 
-            Text textComponent = textObj.AddComponent<Text>();
+            textComponent = textObj.AddComponent<Text>();
             textComponent.font = font;
             textComponent.text = text;
             textComponent.fontSize = fontSize;
             textComponent.alignment = TextAnchor.UpperLeft;
+            tx.sizeDelta = MeasureText();
 
             textObj.transform.SetParent(canvas.transform, false);
             if (canvas.GetComponent<PersistComponent>() != null)
@@ -53,18 +66,22 @@ namespace HollowKnight.Rando3Stats.UI
             textObj.SetActive(false);
         }
 
-        protected override Vector2 MeasureOverride()
+        private Vector2 MeasureText()
         {
-            Text textComponent = textObj.GetComponent<Text>();
             TextGenerator textGen = new();
-            TextGenerationSettings settings = textComponent.GetGenerationSettings(textComponent.rectTransform.rect.size);
+            // have as much space as the screen for the text; otherwise we risk unwanted clipping
+            TextGenerationSettings settings = textComponent.GetGenerationSettings(GuiManager.ReferenceSize);
             // by default, this will inherit the parent canvas's scale factor, which is set to scale with screen space.
             // however, since we're functioning in an unscaled coordinate system we should get the unscaled size to measure correctly.
             settings.scaleFactor = 1;
-            float width = textGen.GetPreferredWidth(textStr, settings);
-            float height = textGen.GetPreferredHeight(textStr, settings);
-
+            float width = textGen.GetPreferredWidth(textComponent.text, settings);
+            float height = textGen.GetPreferredHeight(textComponent.text, settings);
             return new Vector2(width, height);
+        }
+
+        protected override Vector2 MeasureOverride()
+        {
+            return MeasureText();
         }
 
         protected override void ArrangeOverride(Rect availableSpace)
@@ -72,7 +89,7 @@ namespace HollowKnight.Rando3Stats.UI
             RectTransform tx = textObj.GetComponent<RectTransform>();
 
             // place the center of the text transform at the center of the area
-            Vector2 pos = GuiManager.MakeAnchorPosition(GetAlignedTopLeftCorner(availableSpace), GuiManager.ReferenceSize);
+            Vector2 pos = GuiManager.MakeAnchorPosition(GetAlignedTopLeftCorner(availableSpace), DesiredSize);
             tx.anchorMax = pos;
             tx.anchorMin = pos;
 

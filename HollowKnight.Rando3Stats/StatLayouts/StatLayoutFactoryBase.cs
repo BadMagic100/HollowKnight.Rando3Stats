@@ -94,7 +94,7 @@ namespace HollowKnight.Rando3Stats.StatLayouts
         public Layout BuildLayout(GameObject canvas, int subcategoryColumns)
         {
             VerticalStackLayout layout = new(canvas, StatLayoutHelper.VERTICAL_SPACING, HorizontalAlignment.Center, name: GetType().Name);
-            layout.Children.Add(new AlignedText(canvas, GetSectionHeader(), GuiManager.Instance.TrajanBold, StatLayoutHelper.FONT_SIZE_H1)
+            layout.Children.Add(new TextObject(canvas, GetSectionHeader(), GuiManager.Instance.TrajanBold, StatLayoutHelper.FONT_SIZE_H1)
             {
                 VerticalAlignment = VerticalAlignment.Center,
                 HorizontalAlignment = HorizontalAlignment.Center

@@ -1,13 +1,23 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
+using UButton = UnityEngine.UI.Button;
 
 namespace HollowKnight.Rando3Stats.UI
 {
-    public class AlignedRect : ArrangableElement
+    public class Button : ArrangableElement
     {
         private readonly GameObject imgObj;
         private readonly RectTransform tx;
+        private readonly UButton btn;
         private float width, height;
+
+        private void InvokeClick()
+        {
+            Click?.Invoke(this);
+        }
+
+        public event UnityAction<Button>? Click;
 
         public float Width
         {
@@ -37,7 +47,13 @@ namespace HollowKnight.Rando3Stats.UI
             }
         }
 
-        public AlignedRect(GameObject canvas, Color color, float width, float height, string name = "Rect") : base(canvas, name)
+        public bool Enabled
+        {
+            get => btn.interactable;
+            set => btn.interactable = value;
+        }
+
+        public Button(GameObject canvas, float width, float height, string name = "Button") : base(canvas, name)
         {
             this.width = width;
             this.height = height;
@@ -52,7 +68,9 @@ namespace HollowKnight.Rando3Stats.UI
             tx.anchorMin = pos;
             tx.anchorMax = pos;
 
-            imgObj.AddComponent<Image>().color = color;
+            imgObj.AddComponent<Image>().color = Color.green;
+            btn = imgObj.AddComponent<UButton>();
+            btn.onClick.AddListener(InvokeClick);
 
             imgObj.transform.SetParent(canvas.transform, false);
             if (canvas.GetComponent<PersistComponent>() != null)

@@ -29,14 +29,17 @@ namespace HollowKnight.Rando3Stats.UI
         public GameObject CreateCanvas(string name = "Canvas", bool persist = false)
         {
             GameObject rootCanvas = new(name);
-            rootCanvas.AddComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
+            Canvas canvasComponent = rootCanvas.AddComponent<Canvas>();
+            canvasComponent.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvasComponent.overrideSorting = true;
+            canvasComponent.sortingOrder = 999;
             CanvasScaler scale = rootCanvas.AddComponent<CanvasScaler>();
             scale.referenceResolution = ReferenceSize;
             scale.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             rootCanvas.AddComponent<GraphicRaycaster>();
             CanvasGroup group = rootCanvas.AddComponent<CanvasGroup>();
-            group.interactable = false;
-            group.blocksRaycasts = false;
+            group.interactable = true;
+            group.blocksRaycasts = true;
             rootCanvas.AddComponent<LayoutOrchestrator>();
 
             if (persist)

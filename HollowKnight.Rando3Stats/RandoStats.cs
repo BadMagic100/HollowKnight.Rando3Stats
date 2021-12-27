@@ -1,6 +1,7 @@
 ﻿using HollowKnight.Rando3Stats.StatLayouts;
 using HollowKnight.Rando3Stats.Stats;
 using HollowKnight.Rando3Stats.UI;
+using HollowKnight.Rando3Stats.Util;
 using Modding;
 using System;
 using System.Collections;
@@ -73,7 +74,7 @@ namespace HollowKnight.Rando3Stats
             Log($"Found hotkey listener: {hotkeyListener != null}");
             if (hotkeyListener != null)
             {
-                UnityEngine.Object.Destroy(hotkeyListener);
+                GuiManager.Instance.DestroyCanvas(hotkeyListener);
             }
         }
 
@@ -85,9 +86,24 @@ namespace HollowKnight.Rando3Stats
 
         private void HeroController_Awake(On.HeroController.orig_Awake orig, HeroController self)
         {
-            GameObject hotkeyListener = new("RandoStats_HotkeyListener");
-            UnityEngine.Object.DontDestroyOnLoad(hotkeyListener);
+            GameObject hotkeyListener = GuiManager.Instance.CreateCanvas("RandoStats_HotkeyListener", true);
             hotkeyListener.AddComponent<HotkeyGoToCompletionScreen>();
+            hotkeyListener.AddComponent<VisibleWhilePaused>();
+            Log("Setup hotkey panel");
+
+            TextObject sampleText = new(hotkeyListener, "sample\ntext", GuiManager.Instance.TrajanNormal, 20);
+            sampleText.TextAlignment = TextAnchor.MiddleCenter;
+            Button sampleButton = new(hotkeyListener, 100, 20, "sample button");
+            sampleButton.Click += (sender) =>
+            {
+                sender.Enabled = false;
+                SkipToCompletionScreen.Start();
+            };
+            VerticalStackLayout stack = new(hotkeyListener, 10);
+            stack.Children.Add(sampleText);
+            stack.Children.Add(sampleButton);
+
+            stack.PositionAt(new Vector2(GuiManager.ReferenceSize.x / 3, GuiManager.ReferenceSize.y / 3 * 2));
             orig(self);
         }
 
@@ -140,14 +156,14 @@ namespace HollowKnight.Rando3Stats
                     StatLayoutHelper.SetPanelPosition(targetLayout);
                 }
 
-                AlignedRect progressRect = new(canvas, Color.white, 40, 40, "ProgressRect")
+                Rectangle progressRect = new(canvas, Color.white, 40, 40, "ProgressRect")
                 {
                     VerticalAlignment = VerticalAlignment.Center,
                     HorizontalAlignment = HorizontalAlignment.Center
                 };
                 progressRect.PositionAt(new Vector2(GuiManager.ReferenceSize.x / 2, 1060));
 
-                AlignedText clipboardPrompt = new(canvas, "Press Ctrl+C to copy completion", GuiManager.Instance.TrajanNormal, StatLayoutHelper.FONT_SIZE_H2, "CopyPrompt")
+                TextObject clipboardPrompt = new(canvas, "Press Ctrl+C to copy completion", GuiManager.Instance.TrajanNormal, StatLayoutHelper.FONT_SIZE_H2, "CopyPrompt")
                 {
                     VerticalAlignment = VerticalAlignment.Center,
                     HorizontalAlignment = HorizontalAlignment.Center
@@ -181,8 +197,8 @@ namespace HollowKnight.Rando3Stats
             {
                 if (holdToSkipLock) return;
 
-                AlignedRect? progressRect = layoutOrchestrator?.Find<AlignedRect>("ProgressRect");
-                AlignedText? clipboardPrompt = layoutOrchestrator?.Find<AlignedText>("CopyPrompt");
+                Rectangle? progressRect = layoutOrchestrator?.Find<Rectangle>("ProgressRect");
+                TextObject? clipboardPrompt = layoutOrchestrator?.Find<TextObject>("CopyPrompt");
 
                 // if these don't exist something has gone badly; just do the default input behaviour instead
                 if (progressRect == null || clipboardPrompt == null)
