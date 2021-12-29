@@ -93,7 +93,8 @@ namespace HollowKnight.Rando3Stats
 
             TextObject sampleText = new(hotkeyListener, "sample\ntext", GuiManager.Instance.TrajanNormal, 20);
             sampleText.TextAlignment = TextAnchor.MiddleCenter;
-            Button sampleButton = new(hotkeyListener, 100, 20, "sample button");
+            SpriteLoader loader = new(Assembly.GetExecutingAssembly(), "HollowKnight.Rando3Stats.Resources.Images");
+            Button sampleButton = new(hotkeyListener, loader.GetTexture("ButtonRect.png"), "View Stats", GuiManager.Instance.TrajanBold, 12, name: "sample button");
             sampleButton.Click += (sender) =>
             {
                 sender.Enabled = false;
@@ -143,13 +144,20 @@ namespace HollowKnight.Rando3Stats
                         StatLayoutFactoryBase? layoutFactory = StatLayoutHelper.GetLayoutBuilderFromSettings(data);
                         if (layoutFactory != null && layoutFactory.ShouldDisplayForRandoSettings())
                         {
-                            if (targetLayout != null)
+                            try
                             {
-                                targetLayout.Children.Add(layoutFactory.BuildLayout(canvas, gridColumns));
+                                if (targetLayout != null)
+                                {
+                                    targetLayout.Children.Add(layoutFactory.BuildLayout(canvas, gridColumns));
+                                }
+                                else
+                                {
+                                    layoutFactory.ComputeStatsOnly();
+                                }
                             }
-                            else
+                            catch (Exception ex)
                             {
-                                layoutFactory.ComputeStatsOnly();
+                                LogError($"Unknown error calculating {data.Stat} stats!\n{ex.StackTrace}");
                             }
                         }
                     }

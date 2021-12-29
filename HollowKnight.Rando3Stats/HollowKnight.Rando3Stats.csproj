@@ -24,7 +24,11 @@
 	  <DocumentationFile></DocumentationFile>
 	</PropertyGroup>
 	<ItemGroup>
+	  <None Remove="Resources\Images\ButtonRect.png" />
 	  <None Remove="StatLayouts\tcqktdgo.hov~" />
+	</ItemGroup>
+	<ItemGroup>
+	  <EmbeddedResource Include="Resources\Images\ButtonRect.png" />
 	</ItemGroup>
 	<ItemGroup>
 	<Reference Include="Assembly-CSharp">
