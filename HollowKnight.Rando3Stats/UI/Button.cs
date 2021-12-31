@@ -70,7 +70,7 @@ namespace HollowKnight.Rando3Stats.UI
             tx.anchorMax = pos;
 
             imgObj.AddComponent<Image>().color = fill;
-            btn = imgObj.AddComponent<UButton>();
+            btn = imgObj.AddComponent<MultiTargetTintButton>();
             btn.onClick.AddListener(InvokeClick);
 
             imgObj.transform.SetParent(canvas.transform, false);
@@ -79,11 +79,13 @@ namespace HollowKnight.Rando3Stats.UI
             {
                 textObj = new GameObject();
                 textObj.AddComponent<RectTransform>().sizeDelta = new Vector2(width, height);
+
                 Text t = textObj.AddComponent<Text>();
                 t.text = text;
                 t.font = font;
                 t.fontSize = fontSize;
                 t.alignment = TextAnchor.MiddleCenter;
+
                 textObj.transform.SetParent(imgObj.transform, false);
             }
 
@@ -117,7 +119,7 @@ namespace HollowKnight.Rando3Stats.UI
                 new Rect(0, 0, width, height),
                 Vector2.zero
             );
-            btn = imgObj.AddComponent<UButton>();
+            btn = imgObj.AddComponent<MultiTargetTintButton>();
             btn.onClick.AddListener(InvokeClick);
 
             imgObj.transform.SetParent(canvas.transform, false);
@@ -126,11 +128,13 @@ namespace HollowKnight.Rando3Stats.UI
             {
                 textObj = new GameObject();
                 textObj.AddComponent<RectTransform>().sizeDelta = new Vector2(width, height);
+
                 Text t = textObj.AddComponent<Text>();
                 t.text = text;
                 t.font = font;
                 t.fontSize = fontSize;
                 t.alignment = TextAnchor.MiddleCenter;
+
                 textObj.transform.SetParent(imgObj.transform, false);
             }
 

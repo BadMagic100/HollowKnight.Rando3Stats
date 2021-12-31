@@ -90,21 +90,20 @@ namespace HollowKnight.Rando3Stats
             hotkeyListener.AddComponent<HotkeyGoToCompletionScreen>();
             hotkeyListener.AddComponent<VisibleWhilePaused>();
             Log("Setup hotkey panel");
-
-            TextObject sampleText = new(hotkeyListener, "sample\ntext", GuiManager.Instance.TrajanNormal, 20);
-            sampleText.TextAlignment = TextAnchor.MiddleCenter;
             SpriteLoader loader = new(Assembly.GetExecutingAssembly(), "HollowKnight.Rando3Stats.Resources.Images");
-            Button sampleButton = new(hotkeyListener, loader.GetTexture("ButtonRect.png"), "View Stats", GuiManager.Instance.TrajanBold, 12, name: "sample button");
-            sampleButton.Click += (sender) =>
+            Button warpButton = new(hotkeyListener, loader.GetTexture("ButtonRect.png"), "View Stats", GuiManager.Instance.TrajanBold, 12, name: "Warp Button")
+            {
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Bottom
+            };
+            warpButton.Click += (sender) =>
             {
                 sender.Enabled = false;
                 SkipToCompletionScreen.Start();
             };
-            VerticalStackLayout stack = new(hotkeyListener, 10);
-            stack.Children.Add(sampleText);
-            stack.Children.Add(sampleButton);
 
-            stack.PositionAt(new Vector2(GuiManager.ReferenceSize.x / 3, GuiManager.ReferenceSize.y / 3 * 2));
+            warpButton.PositionAt(new Vector2(GuiManager.ReferenceSize.x - 15, 
+                GuiManager.ReferenceSize.y - 300));
             orig(self);
         }
 
