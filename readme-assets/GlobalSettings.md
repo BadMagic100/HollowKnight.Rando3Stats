@@ -19,7 +19,7 @@ The easiest way to describe what this should look like is to just look at the de
 contains several required properties:
 
 | Property | Type | Description | Allowed values | Other notes |
-| --- | --- | --- | --- |
+| --- | --- | --- | --- | --- |
 | Stat | Text | Which stat we're referring to in this config | `ItemsObtained`, `LocationsChecked`, or `TransitionsFound` | Each stat can be listed more than once | 
 | EnabledSubcategories | List | A list of subcategories to display in addition to the total | Varies by stat. Can be empty. |  |
 | Position | Text | Where the stat will be placed | `TopLeft`, `BottomLeft`, `TopCenter`, `TopRight`, `BottomRight`, or `None` | When `None` is selected, the stat will still be calculated but not shown on the end screen. This is useful for the CompletionFormatString setting below. You can also just remove the stat entirely from the list but it won't be usable for completion formatting. |
