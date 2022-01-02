@@ -7,7 +7,11 @@ RandomizerMod3.5 for patch 1.5). It provides detailed statistics about your obta
 completion screen after the credits, and various quality-of-life changes to make it easier to view and
 share your stats.
 
-![End Screen V2](readme-assets/EndScreenV2.png)
+![End screen after a completed game](readme-assets/EndScreenV2.png)
+*End screen after a completed game*
+
+![Skipping to a customized end screen](readme-assets/EndScreenCustomSkip.png)
+*Skipping to a customized end screen*
 
 ## Compatibility
 
