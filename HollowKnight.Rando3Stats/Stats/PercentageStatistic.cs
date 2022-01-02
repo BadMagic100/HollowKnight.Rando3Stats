@@ -30,10 +30,11 @@ namespace HollowKnight.Rando3Stats.Stats
             string content = $"{percent}% ({obtained}/{total})";
             if (shouldRegister)
             {
-                StatFormatRegistry.SetStat($"{StatNamespace}:Full", content);
-                StatFormatRegistry.SetStat($"{StatNamespace}:Percent", $"{percent}%");
-                StatFormatRegistry.SetStat($"{StatNamespace}:Obtained", obtained.ToString());
-                StatFormatRegistry.SetStat($"{StatNamespace}:Total", total.ToString());
+                StatFormatRegistry.SetStat($"{StatNamespace}:{StatFormatRegistry.STAT_FULL}", content);
+                StatFormatRegistry.SetStat($"{StatNamespace}:{StatFormatRegistry.STAT_PERCENT}", $"{percent}%");
+                StatFormatRegistry.SetStat($"{StatNamespace}:{StatFormatRegistry.STAT_OBTAINED}", obtained.ToString());
+                StatFormatRegistry.SetStat($"{StatNamespace}:{StatFormatRegistry.STAT_TOTAL}", total.ToString());
+                StatFormatRegistry.SetStat($"{StatNamespace}:{StatFormatRegistry.STAT_FRACTION}", $"{obtained}/{total}");
             }
             return content;
         }

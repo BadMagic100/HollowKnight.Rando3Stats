@@ -29,9 +29,11 @@ namespace HollowKnight.Rando3Stats.Stats
 
         public bool IsEnabled => Rando.Instance.Settings.RandomizeAreas || Rando.Instance.Settings.RandomizeRooms;
 
+        protected override string StatNamespace => $"{base.StatNamespace}.{Label.Replace(" ", "").Replace("'", "")}";
+
         private string areaName;
 
-        public TransitionsFoundByArea(string areaName) : base(areaName) 
+        public TransitionsFoundByArea(string areaName) : base(areaName, true) 
         {
             this.areaName = areaName;
         }

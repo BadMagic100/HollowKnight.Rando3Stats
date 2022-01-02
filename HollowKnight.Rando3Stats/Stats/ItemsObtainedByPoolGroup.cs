@@ -7,7 +7,7 @@ namespace HollowKnight.Rando3Stats.Stats
 {
     public class ItemsObtainedByPoolGroup : PercentageStatistic, IToggleableStatistic
     {
-        private static SimpleLogger log = new("RandoStats:ItemsObtainedByPoolGroup");
+        private static readonly SimpleLogger log = new("RandoStats:ItemsObtainedByPoolGroup");
 
         public static ItemsObtainedByPoolGroup[] GetAllPoolGroups()
         {
@@ -61,7 +61,9 @@ namespace HollowKnight.Rando3Stats.Stats
             }
         }
 
-        public ItemsObtainedByPoolGroup(LogicalPoolGrouping pools) : base(pools.Name)
+        protected override string StatNamespace => $"{base.StatNamespace}.{Label.Replace(" ", "")}";
+
+        public ItemsObtainedByPoolGroup(LogicalPoolGrouping pools) : base(pools.Name, true)
         {
             poolGroup = pools;
         }

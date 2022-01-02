@@ -32,6 +32,10 @@ still be correct, but your Items Obtained stats will produce unexpected results.
 * Prevents mashing through the completion screen - replaces press to skip with a 1.5 second hold.
 * Allows players to use Ctrl+C to copy completion statistics to the clipboard with custom formatting
   available via [global settings](readme-assets/GlobalSettings.md).
+* Allows players to skip to the completion screen at any time from the pause menu (intended for 3L or 
+  lockout races). Use the button in the bottom right (above BingoUI) or the hotkey
+  <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>.
+* Customizable layouts - choose which stats you want to show and where to display them on the end screen
 * Available Stats
   * **Randomized Locations Checked**    
     This stat is the number of randomized locations that you've checked and obtained. There is a
@@ -64,7 +68,6 @@ still be correct, but your Items Obtained stats will produce unexpected results.
 * More stats!
   * Multiworld compatibility
   * Stat extensions to integrate with ItemSync and Multiworld
-* It is currently not possible to view stats without getting an ending first (e.g. in lockout or 3-line races).
   
 ## Acknowledgements
 

@@ -44,7 +44,9 @@ namespace HollowKnight.Rando3Stats.Stats
             get => poolGroup.IsEnabled;
         }
 
-        public LocationsCheckedByPoolGroup(LogicalPoolGrouping pools) : base(pools.Name)
+        protected override string StatNamespace => $"{base.StatNamespace}.{Label.Replace(" ", "")}";
+
+        public LocationsCheckedByPoolGroup(LogicalPoolGrouping pools) : base(pools.Name, true)
         {
             poolGroup = pools;
         }

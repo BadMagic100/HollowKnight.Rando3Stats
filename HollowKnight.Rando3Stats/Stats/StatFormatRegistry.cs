@@ -10,6 +10,7 @@ namespace HollowKnight.Rando3Stats.Stats
         public const string STAT_PERCENT = "Percent";
         public const string STAT_OBTAINED = "Obtained";
         public const string STAT_TOTAL = "Total";
+        public const string STAT_FRACTION = "Fraction";
         public const string STAT_TIME = "Time";
 
         private const string NS_BUILT_IN = "BuiltIn";
@@ -18,12 +19,12 @@ namespace HollowKnight.Rando3Stats.Stats
         private static readonly Dictionary<string, string> aliases = new()
         {
             { "RACING_EXTENDED", 
-                $"{{{NS_BUILT_IN}:{STAT_TIME}}} {{{NS_BUILT_IN}:{STAT_PERCENT}}} ({{TotalItemsObtained:{STAT_OBTAINED}}}/{{TotalItemsObtained:{STAT_TOTAL}}})" },
+                $"{{{NS_BUILT_IN}:{STAT_TIME}}} {{{NS_BUILT_IN}:{STAT_PERCENT}}} ({{TotalItemsObtained:{STAT_FRACTION}}})" },
             { "RACING_SIMPLE", $"{{{NS_BUILT_IN}:{STAT_TIME}}} {{{NS_BUILT_IN}:{STAT_PERCENT}}}" }
         };
 
         private static readonly Regex aliasFinder = new(@"\$([A-Z_]+)\$");
-        private static readonly Regex placeholderFinder = new(@"{([A-Za-z:]+)}");
+        private static readonly Regex placeholderFinder = new(@"{([A-Za-z:\.]+)}");
 
         public static void GenerateBasicStats()
         {

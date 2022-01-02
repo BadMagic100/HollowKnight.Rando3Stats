@@ -35,7 +35,7 @@ namespace HollowKnight.Rando3Stats
 
         public override string GetVersion()
         {
-            string ver = "1.1.1";
+            string ver = "1.2.0";
             int minAPI = 45;
 
             bool apiTooLow = Convert.ToInt32(ModHooks.Instance.ModVersion.Split('-')[1]) < minAPI;
@@ -89,7 +89,7 @@ namespace HollowKnight.Rando3Stats
             GameObject hotkeyListener = GuiManager.Instance.CreateCanvas("RandoStats_HotkeyListener", true);
             hotkeyListener.AddComponent<HotkeyGoToCompletionScreen>();
             hotkeyListener.AddComponent<VisibleWhilePaused>();
-            Log("Setup hotkey panel");
+
             SpriteLoader loader = new(Assembly.GetExecutingAssembly(), "HollowKnight.Rando3Stats.Resources.Images");
             Button warpButton = new(hotkeyListener, loader.GetTexture("ButtonRect.png"), "View Stats", GuiManager.Instance.TrajanBold, 12, name: "Warp Button")
             {
