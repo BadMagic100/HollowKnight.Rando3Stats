@@ -86,30 +86,33 @@ namespace HollowKnight.Rando3Stats
 
         private void HeroController_Awake(On.HeroController.orig_Awake orig, HeroController self)
         {
-            GameObject hotkeyListener = GuiManager.Instance.CreateCanvas("RandoStats_HotkeyListener", true);
-            hotkeyListener.AddComponent<HotkeyGoToCompletionScreen>();
-            hotkeyListener.AddComponent<VisibleWhilePaused>();
-
-            SpriteLoader loader = new(Assembly.GetExecutingAssembly(), "HollowKnight.Rando3Stats.Resources.Images");
-            Button warpButton = new(hotkeyListener, loader.GetTexture("ButtonRect.png"), "View Stats", GuiManager.Instance.TrajanBold, 12, name: "Warp Button")
+            if (Rando.Instance.Settings.Randomizer)
             {
-                HorizontalAlignment = HorizontalAlignment.Right,
-                VerticalAlignment = VerticalAlignment.Bottom
-            };
-            warpButton.Click += (sender) =>
-            {
-                sender.Enabled = false;
-                SkipToCompletionScreen.Start();
-            };
+                GameObject hotkeyListener = GuiManager.Instance.CreateCanvas("RandoStats_HotkeyListener", true);
+                hotkeyListener.AddComponent<HotkeyGoToCompletionScreen>();
+                hotkeyListener.AddComponent<VisibleWhilePaused>();
 
-            warpButton.PositionAt(new Vector2(GuiManager.ReferenceSize.x - 15, 
-                GuiManager.ReferenceSize.y - 300));
+                SpriteLoader loader = new(Assembly.GetExecutingAssembly(), "HollowKnight.Rando3Stats.Resources.Images");
+                Button warpButton = new(hotkeyListener, loader.GetTexture("ButtonRect.png"), "View Stats", GuiManager.Instance.TrajanBold, 12, name: "Warp Button")
+                {
+                    HorizontalAlignment = HorizontalAlignment.Right,
+                    VerticalAlignment = VerticalAlignment.Bottom
+                };
+                warpButton.Click += (sender) =>
+                {
+                    sender.Enabled = false;
+                    SkipToCompletionScreen.Start();
+                };
+
+                warpButton.PositionAt(new Vector2(GuiManager.ReferenceSize.x - 15,
+                    GuiManager.ReferenceSize.y - 300));
+            }
             orig(self);
         }
 
         private string GetLanguageString(string key, string sheetTitle)
         {
-            if (key == "PERMA_GAME_OVER_CONTINUE" && sheetTitle == "Credits List")
+            if (Rando.Instance.Settings.Randomizer && key == "PERMA_GAME_OVER_CONTINUE" && sheetTitle == "Credits List")
             {
                 return "Hold any button to continue";
             }
@@ -195,9 +198,9 @@ namespace HollowKnight.Rando3Stats
         private void InputHandler_CutsceneInput(On.InputHandler.orig_CutsceneInput orig, InputHandler self)
         {
             string scene = GameManager.instance.GetSceneNameString();
-            if (scene != END_GAME_COMPLETION)
+            if (scene != END_GAME_COMPLETION || !Rando.Instance.Settings.Randomizer)
             {
-                // if we're in any other cutscene, just do the default behavior.
+                // if we're in any other cutscene or we're not playing randomizer, just do the default behavior.
                 orig(self);
             }
             else
