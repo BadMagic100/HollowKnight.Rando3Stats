@@ -53,6 +53,8 @@ namespace HollowKnight.Rando3Stats.UI
             textComponent.font = font;
             textComponent.text = text;
             textComponent.fontSize = fontSize;
+            textComponent.horizontalOverflow = HorizontalWrapMode.Overflow;
+            textComponent.verticalOverflow = VerticalWrapMode.Overflow;
             textComponent.alignment = TextAnchor.UpperLeft;
             tx.sizeDelta = MeasureText();
 
